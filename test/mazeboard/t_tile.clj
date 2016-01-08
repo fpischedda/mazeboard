@@ -1,4 +1,4 @@
-(ns mazeboard.tile-test
+(ns mazeboard.t-tile
   (:use midje.sweet)
   (:require [mazeboard.tile :as tile]))
 
