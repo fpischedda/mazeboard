@@ -18,11 +18,11 @@
 
 (defn rotate-tile-right [tile]
   "Rotate a tile counterclockwise"
-  (conj (subvec tile 3) (last tile)))
+  (into (subvec tile 3) (subvec tile 0 3)))
 
 (defn rotate-tile [dir tile]
   "rotate a tile in the specified direction: > 0 = right otherwise left"
-  (if (> dir 0)
+  (if (= dir :right)
     (rotate-tile-right tile)
     (rotate-tile-left tile)))
 
