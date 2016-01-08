@@ -9,7 +9,9 @@
                  [ring/ring-core "1.2.1"]
                  ]
   :main ^:skip-aot mazeboard.core
-  :plugins [[lein-ring "0.8.11"]]
+  :plugins [[lein-ring "0.8.11"] [lein-midje "3.2"]]
   :ring {:handler mazeboard.api/handler}
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :test-paths ["test" "test/mazeboard"]
+  :profiles {:uberjar {:aot :all}
+             :dev {:dependencies [[midje "1.8.3"]]}})

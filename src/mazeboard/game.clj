@@ -46,7 +46,7 @@
 
 (defn can-move-to-here [position game direction] 
   "returns true if the player can move to this position"
-  (let [wall (tile/wall-at (swap-dir direction) 
+  (let [wall (tile/wall-at (direction swap-dir) 
                            (board/tile-at (:board game)
                                           (:row position)
                                           (:col position)))]

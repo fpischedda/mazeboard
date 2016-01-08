@@ -1,8 +1,8 @@
 (ns mazeboard.tile)
 
-(defn make-tile [east north west south]
+(defn make-tile [north east south west]
   "creates a tile represented as a vector index 0 is north, 1 is east etc"
-  [east north west south])
+  [north east south west])
 
 (defn random-wall []
   "randomize a wall; a wall can be :open or :solid"
@@ -38,10 +38,10 @@
 (defn at-west [tile]
   (get tile 3))
 
-(def direction-fn {:north at-north 
-                   :east at-east 
-                   :south at-south 
-                   :west at-west})
+(def direction-fn {:north #(get % 0) 
+                   :east #(get % 1) 
+                   :south #(get % 2) 
+                   :west #(get % 3)})
 
 (defn wall-at [dir tile]
   "return the tile wall at the specified direction (:north, :east etc)"
