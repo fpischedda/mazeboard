@@ -13,14 +13,18 @@
   [(make-player "fra" 0 0)
    (make-player "arf" 0 (- width 1))])
 
-(defn init-game [players width height dice-type]
+(defn init-game 
   "creates a game as an hash map"
-  {:players players
-   :current-player 0
-   :dice (if (= dice-type :dice)
-           (dice/make-dice)
-           (dice/make-coin))
-   :board (board/make-board width height)})
+  ([players width height dice-type]
+   (init-game players width height dice-type tile/random-tile))
+
+  ([players width height dice-type tile-fn]
+   {:players players
+    :current-player 0
+    :dice (if (= dice-type :dice)
+            (dice/make-dice)
+            (dice/make-coin))
+    :board (board/make-board width height tile-fn)}))
 
 (defmacro game-current-player [game]
   "returns the current player"
@@ -34,12 +38,16 @@
   "returns the position of the current player"
   (player-position (game-current-player game)))
 
+(defn tile-at-position [position game]
+  "returns the tile at the specified position"
+  (board/tile-at (:board game)
+                 (:row position)
+                 (:col position)))
+
 (defn can-move-from-here [position game direction] 
   "returns true if the player can move from the specified position"
   (let [wall (tile/wall-at direction
-                           (board/tile-at (:board game)
-                                          (:row position)
-                                          (:col position)))]
+                           (tile-at-position position game))]
     (= wall :open)))
 
 (def swap-dir {:north :south :east :west :south :north :west :east})
@@ -47,9 +55,7 @@
 (defn can-move-to-here [position game direction] 
   "returns true if the player can move to this position"
   (let [wall (tile/wall-at (direction swap-dir) 
-                           (board/tile-at (:board game)
-                                          (:row position)
-                                          (:col position)))]
+                           (tile-at-position position game))]
     (= wall :open)))
 
 (defn valid-move [position new-position game move]

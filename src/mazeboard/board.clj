@@ -1,21 +1,21 @@
 (ns mazeboard.board
   (:require [mazeboard.tile :as tile]))
 
-(defn make-board-row [size]
+(defn make-board-row [size tile-fn]
   "creates a board row"
-  (for [t (range size)] (tile/random-tile)))
+  (into [] (repeatedly size tile-fn)))
+  ;(for [t (range size)] (tile-fn)) 
 
-(defn make-board [width height]
-  "creates a board"
-  {:width width :height height
-   :tiles (for [r (range height)] (make-board-row width))})
+(defn make-board 
+  "creates a board, if no tile-fn function is provided tile/random-tile will be used"
+  ([width height] (make-board width height tile/random-tile))
+  ([width height tile-fn]
+   {:width width :height height
+    :tiles (into [] (repeatedly height (fn [] (make-board-row width tile-fn))))}))
 
-(defmacro tile-at [board row col]
+(defn tile-at [board row col]
   "return the tile at specified coordinates"
-  (let [tiles (:tiles board)
-        tiles-row (get tiles row)
-        curr-tile (get tiles-row col)]
-    curr-tile))
+  (get (get (:tiles board) row) col))
 
 (defn update-board [board row col new-tile]
   "replace the tile at row-col with the new tile"

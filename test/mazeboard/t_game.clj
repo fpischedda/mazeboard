@@ -1,16 +1,28 @@
 (ns mazeboard.t-game
   (:use midje.sweet)
-  (:require [mazeboard.game :as game]))
+  (:require [mazeboard.game :as game]
+            [mazeboard.tile :as tile]))
 
 (def position {:row 1 :col 1})
 
-(def the-game (game/init-game (game/make-fake-players 5 5) 5 5 :coin))
+(defn fake-tile-fn [] (tile/make-tile :solid :open :solid :open))
 
-(facts "The game relies on a couple of utility functions"
+(def fake-tile (fake-tile-fn))
+
+(def the-game (game/init-game (game/make-fake-players 5 5) 5 5 :coin fake-tile-fn))
+
+(facts "Game related functions"
        (fact "Use calculate-next-position to change the position"
              (game/calculate-next-position position [:move :north]) => {:row 0 :col 1}
              (game/calculate-next-position position [:move :east]) => {:row 1 :col 2}
              (game/calculate-next-position position [:move :south]) => {:row 2 :col 1}
              (game/calculate-next-position position [:move :west]) => {:row 1 :col 0})
        (fact "Use next-player to get the next active player"
-             (game/next-player the-game) => 1))
+             (game/next-player the-game) => 1)
+       (fact "Mapping a direction to its opposite"
+             (:north game/swap-dir) => :south
+             (:east game/swap-dir) => :west
+             (:south game/swap-dir) => :north
+             (:west game/swap-dir) => :east)
+       (fact "Testing tile-at-position"
+             (game/tile-at-position {:row 0 :col 0} the-game) => fake-tile))
