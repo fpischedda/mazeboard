@@ -24,6 +24,8 @@
     :dice (if (= dice-type :dice)
             (dice/make-dice)
             (dice/make-coin))
+    :end-position {:row (int (/ height 2))
+                   :col (int (/ width 2))}
     :board (board/make-board width height tile-fn)}))
 
 (defmacro game-current-player [game]

@@ -4,14 +4,17 @@
 (defn make-board-row [size tile-fn]
   "creates a board row"
   (into [] (repeatedly size tile-fn)))
-  ;(for [t (range size)] (tile-fn)) 
+
+(defn make-board-tiles [width height tile-fn]
+  "create board tiles matrix of dimensions width X height"
+  (into [] (repeatedly height (fn [] (make-board-row width tile-fn)))))
 
 (defn make-board 
   "creates a board, if no tile-fn function is provided tile/random-tile will be used"
   ([width height] (make-board width height tile/random-tile))
   ([width height tile-fn]
    {:width width :height height
-    :tiles (into [] (repeatedly height (fn [] (make-board-row width tile-fn))))}))
+    :tiles (make-board-tiles width height tile-fn)}))
 
 (defn tile-at [board row col]
   "return the tile at specified coordinates"
