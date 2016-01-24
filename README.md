@@ -1,6 +1,6 @@
 # mazeboard
 
-FIXME: description
+Clojure implementation of the mazeboard game (previously implemented in common lisp)
 
 ## Installation
 
@@ -30,7 +30,7 @@ FIXME: listing of options this app accepts.
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Francesco Pischedda
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the AGLP 3 License
+# mazeboard-clj
