@@ -25,4 +25,6 @@
              (:south game/swap-dir) => :north
              (:west game/swap-dir) => :east)
        (fact "Testing tile-at-position"
-             (game/tile-at-position {:row 0 :col 0} the-game) => fake-tile))
+             (game/tile-at-position {:row 0 :col 0} the-game) => fake-tile)
+       (fact "Check if a provided position is a winning one"
+             (game/is-winning-position? the-game {:row 0 :col 0}) => false))

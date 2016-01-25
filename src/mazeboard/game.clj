@@ -61,7 +61,9 @@
     (= wall :open)))
 
 (defn valid-move [position new-position game move]
-  (and (can-move-from-here position game move)
+  "returns true if the new position is valid, false otherwise"
+  (and (board/is-inside? (:board game) (:row new-position) (:col new-position))
+       (can-move-from-here position game move)
        (can-move-to-here new-position game move)))
 
 (def move-functions {:north {:row dec :col identity}
@@ -85,6 +87,10 @@
     (if (= player-index (count (:players game)))
      0
      (inc player-index))))
+
+(defn is-winning-position? [game position]
+  "returns true if the specified position is the winning one"
+  (= (:end-position game) position))
 
 (defn handle-movement [game move]
   "handle the movement of the current player"
