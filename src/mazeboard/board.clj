@@ -27,3 +27,17 @@
 (defn rotate-board-tile [board row col dir]
   "rotate a board tile identified by row col coordinates"
   (update-board board row col (tile/rotate-tile dir (tile-at board row col))))
+
+(defn board-width [board]
+  "returns board width"
+  (:width board))
+
+(defn board-height [board]
+  "returns board height"
+  (:height board))
+
+(defn is-inside? [board row col]
+  "returns true if the position is inside the board, false otherwise"
+  (and
+    (>= row 0) (< row (board-height board))
+    (>= col 0) (< col (board-width board))))
