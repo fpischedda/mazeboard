@@ -48,17 +48,13 @@
 
 (defn can-move-from-here [position game direction] 
   "returns true if the player can move from the specified position"
-  (let [wall (tile/wall-at direction
-                           (tile-at-position position game))]
-    (= wall :open)))
+  (tile/is-open? direction (tile-at-position position game)))
 
 (def swap-dir {:north :south :east :west :south :north :west :east})
 
 (defn can-move-to-here [position game direction] 
   "returns true if the player can move to this position"
-  (let [wall (tile/wall-at (direction swap-dir) 
-                           (tile-at-position position game))]
-    (= wall :open)))
+  (tile/is-open? (direction swap-dir) (tile-at-position position game)))
 
 (defn valid-move [position new-position game move]
   "returns true if the new position is valid, false otherwise"
