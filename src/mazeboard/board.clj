@@ -22,7 +22,7 @@
 
 (defn update-board [board row col new-tile]
   "replace the tile at row-col with the new tile"
-  (assoc (get (:tiles board) row) col new-tile))
+  (assoc (get-in board [:tiles row col]) new-tile))
 
 (defn rotate-board-tile [board row col dir]
   "rotate a board tile identified by row col coordinates"
