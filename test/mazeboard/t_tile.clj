@@ -12,6 +12,11 @@
              (tile/wall-at :east the-tile) => :solid
              (tile/wall-at :south the-tile) => :open
              (tile/wall-at :west the-tile) => :open)
+       (fact "I can check if a tile wall is open or not"
+             (tile/is-open? :north the-tile) => false
+             (tile/is-open? :east the-tile) => false
+             (tile/is-open? :south the-tile) => true
+             (tile/is-open? :west the-tile) => true)
        (fact "Tiles can be rotated clockwise or counterclockwise"
              (tile/rotate-tile-left the-tile) => [:solid :open :open :solid]
              (tile/rotate-tile-right the-tile) => [:open :solid :solid :open]

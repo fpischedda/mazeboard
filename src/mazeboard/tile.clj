@@ -43,6 +43,10 @@
                    :south #(get % 2) 
                    :west #(get % 3)})
 
-(defn wall-at [dir tile]
+(defn wall-at [side tile]
   "return the tile wall at the specified direction (:north, :east etc)"
-  ((direction-fn dir) tile))
+  ((direction-fn side) tile))
+
+(defn is-open? [side tile]
+  "returns true if the wall at the specified side is open"
+  (= (wall-at side tile) :open))
