@@ -3,11 +3,11 @@
 
 (defn make-board-row [size tile-fn]
   "creates a board row"
-  (into [] (repeatedly size tile-fn)))
+  (vec (repeatedly size tile-fn)))
 
 (defn make-board-tiles [width height tile-fn]
   "create board tiles matrix of dimensions width X height"
-  (into [] (repeatedly height (fn [] (make-board-row width tile-fn)))))
+  (vec (repeatedly height (fn [] (make-board-row width tile-fn)))))
 
 (defn make-board 
   "creates a board, if no tile-fn function is provided tile/random-tile will be used"
