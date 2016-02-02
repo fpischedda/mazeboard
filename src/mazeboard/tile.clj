@@ -38,6 +38,13 @@
 (defn at-west [tile]
   (get tile 3))
 
+(def wall-name {0 :north 1 :east 2 :south 3 :west})
+
+(defn open-walls [tile] (filter #(not (nil? %)) (map-indexed
+                                  (fn [idx wall]
+                                    (if (= :open wall) (wall-name idx) nil))
+                                  tile)))
+
 (def direction-fn {:north #(get % 0) 
                    :east #(get % 1) 
                    :south #(get % 2) 
