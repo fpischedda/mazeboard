@@ -27,4 +27,6 @@
        (fact "Testing tile-at-position"
              (game/tile-at-position {:row 0 :col 0} the-game) => fake-tile)
        (fact "Check if a provided position is a winning one"
-             (game/is-winning-position? the-game {:row 0 :col 0}) => false))
+             (game/is-winning-position? the-game {:row 0 :col 0}) => false)
+       (fact "The player in the ending position is the winner"
+             (game/winner the-game) => nil))

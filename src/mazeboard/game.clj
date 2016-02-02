@@ -105,6 +105,10 @@
         dir (get move 4)]
     (board/rotate-board-tile game row col dir)))
 
+(defn winner [game]
+  "returns the winner if any or nil"
+  (first (filter #(is-winning-position? game (:position %)) (:players game))))
+
 (defn handle-turn [game move]
   (let [move-type (get move 0)]
     (if (= move-type :move)
