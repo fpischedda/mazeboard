@@ -21,9 +21,7 @@
   ([players width height dice-type tile-fn]
    {:players players
     :current-player 0
-    :dice (if (= dice-type :dice)
-            (dice/make-dice)
-            (dice/make-coin))
+    :dice (dice/from-dice-type dice-type)
     :end-position {:row (int (/ height 2))
                    :col (int (/ width 2))}
     :board (board/make-board width height tile-fn)}))

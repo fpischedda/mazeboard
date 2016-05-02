@@ -9,7 +9,8 @@
 
 (def fake-tile (fake-tile-fn))
 
-(def the-game (game/init-game (game/make-fake-players 5 5) 5 5 :coin fake-tile-fn))
+(def the-game (game/init-game
+                (game/make-fake-players 5 5) 5 5 :coin fake-tile-fn))
 
 (facts "Game related functions"
        (fact "Use calculate-next-position to change the position"
