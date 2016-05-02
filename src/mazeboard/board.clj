@@ -9,7 +9,7 @@
   "create board tiles matrix of dimensions width X height"
   (vec (repeatedly height (fn [] (make-board-row width tile-fn)))))
 
-(defn make-board 
+(defn make-board
   "creates a board, if no tile-fn function is provided tile/random-tile will be used"
   ([width height] (make-board width height tile/random-tile))
   ([width height tile-fn]
