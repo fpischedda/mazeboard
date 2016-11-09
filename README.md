@@ -10,8 +10,14 @@ Download from https://github.com/fpischedda/mazeboard
 
 ## Build
 
+    $ lein deps
+
     $ lein build
-   
+
+## Tests
+
+    $ lein midje :all
+
 ## Usage
 
     $ java -jar mazeboard-0.1.0-standalone.jar [args]
