@@ -13,7 +13,7 @@
   [(make-player "fra" 0 0)
    (make-player "arf" 0 (- width 1))])
 
-(defn init-game 
+(defn init-game
   "creates a game as an hash map"
   ([players width height dice-type]
    (init-game players width height dice-type tile/random-tile))
@@ -26,15 +26,15 @@
                    :col (int (/ width 2))}
     :board (board/make-board width height tile-fn)}))
 
-(defmacro game-current-player [game]
+(defn game-current-player [game]
   "returns the current player"
   (get (:players game) (:current-player game)))
 
-(defmacro player-position [player]
+(defn player-position [player]
   "returns the players position"
   (:position player))
 
-(defmacro game-current-player-position [game]
+(defn game-current-player-position [game]
   "returns the position of the current player"
   (player-position (game-current-player game)))
 
@@ -44,13 +44,13 @@
                  (:row position)
                  (:col position)))
 
-(defn can-move-from-here [position game direction] 
+(defn can-move-from-here [position game direction]
   "returns true if the player can move from the specified position"
   (tile/is-open? direction (tile-at-position position game)))
 
 (def swap-dir {:north :south :east :west :south :north :west :east})
 
-(defn can-move-to-here [position game direction] 
+(defn can-move-to-here [position game direction]
   "returns true if the player can move to this position"
   (tile/is-open? (direction swap-dir) (tile-at-position position game)))
 
