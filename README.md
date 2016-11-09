@@ -1,32 +1,20 @@
 # mazeboard
 
-Clojure implementation of the mazeboard game (previously implemented in common lisp)
+Clojure implementation of the mazeboard game (previously implemented in common lisp, maybe I'll share that one too in the future :) )
+
+"Mazeboard" is a board game; I'll add a description of the mechanics, I promise!
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from https://github.com/fpischedda/mazeboard
 
+## Build
+
+    $ lein build
+   
 ## Usage
 
-FIXME: explanation
-
     $ java -jar mazeboard-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
