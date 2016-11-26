@@ -1,8 +1,8 @@
 (defproject mazeboard "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :description "An implementation of the Mazeboard game"
+  :url "https://francesco.pischedda.info"
+  :license {:name "AGPL V3 License"
+            :url "https://www.gnu.org/licenses/agpl-3.0.en.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [liberator "0.13"]
                  [mount "0.1.10"]
