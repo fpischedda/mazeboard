@@ -20,8 +20,6 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[midje "1.8.3"]]}})
 
-  :source-paths ["src/cljs" "src/common" "src/clj"]
-
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {:builds
