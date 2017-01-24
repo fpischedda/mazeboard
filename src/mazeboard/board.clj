@@ -39,5 +39,5 @@
 (defn is-inside? [board row col]
   "returns true if the position is inside the board, false otherwise"
   (and
-    (>= row 0) (< row (board-height board))
-    (>= col 0) (< col (board-width board))))
+   (>= row 0) (< row (board-height board))
+   (>= col 0) (< col (board-width board))))
