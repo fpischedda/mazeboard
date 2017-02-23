@@ -82,7 +82,7 @@
 (defn handle-movement [game move]
   "handle the movement of the current player"
   (let [player (game-current-player game)
-        position (player-position player)
+        position (player/player-position player)
         next-position (calculate-next-position position move)]
     (if (valid-move position next-position game move)
       ((set-current-player-position game next-position)
