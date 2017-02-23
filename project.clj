@@ -4,27 +4,30 @@
   :license {:name "AGPL V3 License"
             :url "https://www.gnu.org/licenses/agpl-3.0.en.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.9.473"]
                  [liberator "0.13"]
                  [mount "0.1.10"]
                  [compojure "1.3.4"]
                  [ring/ring-core "1.2.1"]
+                 [reagent "0.6.0"]
                  ]
   :main ^:skip-aot mazeboard.core
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2"]
-            [lein-cljsbuild "1.1.1"]
+            [lein-cljsbuild "1.1.5"]
             [lein-figwheel "0.5.0-3"]]
   :ring {:handler mazeboard.api/handler}
+  :source-paths ["src/clj" "src/cljc"]
   :target-path "target/%s"
   :test-paths ["test" "test/mazeboard"]
   :profiles {:uberjar {:aot :all}
-             :dev {:dependencies [[midje "1.8.3"]]}})
+             :dev {:dependencies [[midje "1.8.3"]]}}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {:builds
               [{:id "dev"
-                :source-paths ["src/cljs" "src/common"]
+                :source-paths ["src/cljs" "src/cljc"]
 
                 :figwheel {:on-jsload "mazeboardui.core/on-js-reload"}
 
