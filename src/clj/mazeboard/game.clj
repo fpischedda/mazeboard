@@ -1,17 +1,14 @@
 (ns mazeboard.game
   (:require [clojure.pprint :as pprint]
             [mazeboard.board :as board]
+            [mazeboard.player :as player]
             [mazeboard.tile :as tile]
             [mazeboard.dice :as dice]))
 
-(defn make-player [name start-row start-col]
-  "return a plist that defines a player with a name and a position"
-  {:name name :position {:row start-row :col start-col}})
-
 (defn make-fake-players [width height]
   "creates a couple of fake players"
-  [(make-player "fra" 0 0)
-   (make-player "arf" 0 (- width 1))])
+  [(player/make-player "fra" 0 0)
+   (player/make-player "arf" 0 (- width 1))])
 
 (defn init-game
   "creates a game as an hash map"
@@ -30,13 +27,9 @@
   "returns the current player"
   (get (:players game) (:current-player game)))
 
-(defn player-position [player]
-  "returns the players position"
-  (:position player))
-
 (defn game-current-player-position [game]
   "returns the position of the current player"
-  (player-position (game-current-player game)))
+  (player/player-position (game-current-player game)))
 
 (defn tile-at-position [position game]
   "returns the tile at the specified position"

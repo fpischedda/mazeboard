@@ -1,31 +1,16 @@
 (ns mazeboardui.core
   (:require [reagent.core :as reagent :refer [atom]]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [mazeboard.player :as player]
+            [mazeboard.board :as board]))
 
 (enable-console-print!)
 
-(println "Edits to this text should show up in your developer console.")
-
 ;; define your app data so that it doesn't get over-written on reload
 
-(def app-state (atom {:board {:tiles [[[:solid :open :solid :solid]
-                                       [:solid :open :solid :open]
-                                       [:solid :solid :open :open]
-                                       [:solid :solid :open :open]
-                                       ]
-                                      [[:solid :open :open :solid]
-                                       [:open :open :solid :open]
-                                       [:open :solid :solid :open]
-                                       [:open :solid :solid :open]
-                                       ]
-                                      [[:solid :open :solid :solid]
-                                       [:solid :open :solid :open]
-                                       [:open :solid :solid :open]
-                                       [:solid :open :solid :open]
-                                       ]
-                                      ]}}))
+(def app-state (atom (board/make-board 10 10)))
 
-(def player {:name "Player 1" :position {:row 0 :col 0}})
+(def player (atom (player/make-player "Player 1" 1 1)))
 
 (def wall-names {0 :north 1 :east 2 :south 3 :west})
 
