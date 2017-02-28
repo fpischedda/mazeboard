@@ -21,5 +21,6 @@
        (fact "check if a position is inside a board"
              (board/is-inside? fake-board 0 0) => true)
        (fact "update-board should replace the specified tile with the provided one"
-             (board/update-board fake-board 0 0
-                                 [:open :open :open :open]) => [[:open :open :open :open]]))
+             (board/tile-at
+              (board/update-board fake-board 0 0 [:open :open :open :open])
+              0 0) => [:open :open :open :open]))
