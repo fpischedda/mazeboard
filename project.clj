@@ -21,7 +21,8 @@
   :target-path "target/%s"
   :test-paths ["test" "test/mazeboard"]
   :profiles {:uberjar {:aot :all}
-             :dev {:dependencies [[midje "1.8.3"]]}}
+             :dev {:dependencies [[midje "1.8.3"]
+                                  [lein-midje "3.2"]]}}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
