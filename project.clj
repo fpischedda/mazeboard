@@ -4,13 +4,17 @@
   :license {:name "AGPL V3 License"
             :url "https://www.gnu.org/licenses/agpl-3.0.en.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.473"]
+                 [org.clojure/clojurescript "1.9.946"]
                  [liberator "0.13"]
                  [mount "0.1.10"]
                  [compojure "1.3.4"]
                  [ring/ring-core "1.2.1"]
-                 [reagent "0.6.0"]
-                 ]
+                 [rum "0.10.8"]
+                 [bidi "2.1.2"]
+                 [kibu/pushy "0.3.8"]
+                 [venantius/accountant "0.2.0"]
+                 [org.roman01la/citrus "3.0.0"]
+                 [cljs-http "0.1.43"]]
   :main ^:skip-aot mazeboard.core
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2"]

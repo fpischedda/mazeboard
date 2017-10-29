@@ -1,8 +1,12 @@
 (ns mazeboardui.core
-  (:require [reagent.core :as reagent :refer [atom]]
+  (:require [rum.core :as rum]
             [clojure.string :as string]
             [mazeboard.player :as player]
-            [mazeboard.board :as board]))
+            [mazeboard.board :as board]
+            [mazeboard.handles.local-storage :refer [local-storage]]
+            [mazeboard.handles.navigation :refer [goto]]
+            [mazeboard.handles.session :refer [set-token]]
+            [mazeboard.handles.http :refer [http]]))
 
 (enable-console-print!)
 
@@ -12,39 +16,36 @@
 
 (def player (atom (player/make-player "Player 1" 1 1)))
 
-(def wall-names {0 :north 1 :east 2 :south 3 :west})
+(def routes
+  ["/" [["" :dashboard]
+        ["index.html" :login]
+        ["login" :login]
+        ["logout" :logout]
+        [["game/" :id] :game]]])
 
-(defn solid-wall-names [tile]
-  (filter #(not (nil? %))
-          (map-indexed (fn [idx wall]
-                         (if (= wall :solid) (wall-names idx) nil))
-                       tile)))
+(defonce reconciler
+  (citrus/reconciler {:state (atom {})
+                      :controllers {:dashboard dashboard/control
+                                    :login login/control
+                                    :router router-ctrl/control}
+                      :effect-handlers {:http http
+                                        :goto goto
+                                        :set-token set-token
+                                        :local-storage local-storage}}))
 
-(defn keyword-to-class [wall]
-  (str "solid-" wall))
+(citrus/broadcast-sync! reconciler :init)
+(citrus/dispatch-sync! reconciler :login :load-profile :profile)
 
-(defn tile-wall-classes [tile]
-  (string/join " " (map #(-> % name
-                             keyword-to-class)
-                        (solid-wall-names tile))))
+(router/start! #(citrus/dispatch! reconciler :router :push %) routes)
 
-(defn tile-view [tile player]
-  [:div.tile {:class (tile-wall-classes tile)}
-    (when (not (nil? player)) (:name player))])
-
-(defn board-row-view [row]
-  [:div.board-row
-   (doall (for [tile row] (tile-view tile player)))])
-
-(defn board-view [board]
-  [:div.board
-   (doall (for [row (:tiles board)] (board-row-view row)))])
-
-(defn game-view [game]
-  [:div
-   [:h1 "Mazeboard game client"]
-   [board-view (:board @game)]])
-
+(configure-navigation!
+ {
+  :nav-handler #(citrus/dispatch! reconciler :router :push (bidi/match-route routes %))
+  :path-exists? (fn [path]
+                  (boolean (bidi/match-route routes path)))})
+;; render
+(rum/mount (ui/App reconciler)
+           (dom/q "#app"))
 (reagent/render-component [game-view app-state]
                           (. js/document (getElementById "app")))
 
