@@ -3,12 +3,13 @@
   :url "https://francesco.pischedda.info"
   :license {:name "AGPL V3 License"
             :url "https://www.gnu.org/licenses/agpl-3.0.en.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0-beta4"]
                  [org.clojure/clojurescript "1.9.946"]
-                 [liberator "0.13"]
-                 [mount "0.1.10"]
-                 [compojure "1.3.4"]
-                 [ring/ring-core "1.2.1"]
+                 [http-kit "2.2.0"]
+                 [liberator "0.15.1"]
+                 [mount "0.1.11"]
+                 [compojure "1.6.0"]
+                 [ring "1.6.3"]
                  [rum "0.10.8"]
                  [bidi "2.1.2"]
                  [kibu/pushy "0.3.8"]
