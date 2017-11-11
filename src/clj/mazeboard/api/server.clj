@@ -1,6 +1,7 @@
 (ns mazeboard.api.server
   (:require [mazeboard.api.routes :refer [routes]]
+            [compojure.handler :refer [site]]
             [org.httpkit.server :refer [run-server]]))
 
-(defc run [params]
+(defn run [params]
   (run-server (site #'routes) params))
