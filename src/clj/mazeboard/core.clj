@@ -1,8 +1,10 @@
 (ns mazeboard.core
-  (:require [mazeboard.api.server :as server])
+  (:require [mount.core :as mount]
+            [mazeboard.system :refer [system]])
   (:gen-class))
 
 (defn -main
   "Mazeboard game executable"
   [& args]
-  (server/run {:port 8080}))
+  (println "starting server: " (:server (:config system)))
+  (mount/start))

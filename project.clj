@@ -7,6 +7,7 @@
                  [org.clojure/clojurescript "1.9.946"]
                  [http-kit "2.2.0"]
                  [liberator "0.15.1"]
+                 [yogthos/config "0.9"]
                  [mount "0.1.11"]
                  [compojure "1.6.0"]
                  [ring "1.6.3"]
@@ -15,19 +16,25 @@
                  [kibu/pushy "0.3.8"]
                  [venantius/accountant "0.2.0"]
                  [org.roman01la/citrus "3.0.0"]
+                 [com.novemberain/monger "3.1.0"]
+                 [buddy/buddy-hashers "1.3.0"]
                  [cljs-http "0.1.43"]]
   :main ^:skip-aot mazeboard.core
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2"]
             [lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.0-3"]]
+            [lein-figwheel "0.5.0-3"]
+            [org.clojure/tools.nrepl "0.2.12"]]
   :ring {:handler mazeboard.api/handler}
   :source-paths ["src/clj" "src/cljc"]
   :target-path "target/%s"
   :test-paths ["test" "test/mazeboard"]
-  :profiles {:uberjar {:aot :all}
+  :profiles {:uberjar {:aot :all
+                       :resource-paths ["config/prod"]}
              :dev {:dependencies [[midje "1.8.3"]
-                                  [lein-midje "3.2"]]}}
+                                  [lein-midje "3.2"]
+                                  [org.clojure/tools.nrepl "0.2.12"]]
+                   :resource-paths ["config/dev"]}}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
