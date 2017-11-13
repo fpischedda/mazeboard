@@ -21,7 +21,7 @@
                  [cljs-http "0.1.43"]]
   :main ^:skip-aot mazeboard.core
   :plugins [[lein-ring "0.8.11"]
-            [lein-midje "3.2"]
+            [lein-midje "3.2.1"]
             [lein-cljsbuild "1.1.5"]
             [lein-figwheel "0.5.0-3"]
             [org.clojure/tools.nrepl "0.2.12"]]
@@ -31,8 +31,8 @@
   :test-paths ["test" "test/mazeboard"]
   :profiles {:uberjar {:aot :all
                        :resource-paths ["config/prod"]}
-             :dev {:dependencies [[midje "1.8.3"]
-                                  [lein-midje "3.2"]
+             :dev {:dependencies [[midje "1.9.0-alpha11"]
+                                  [lein-midje "3.2.1"]
                                   [org.clojure/tools.nrepl "0.2.12"]]
                    :resource-paths ["config/dev"]}}
 
