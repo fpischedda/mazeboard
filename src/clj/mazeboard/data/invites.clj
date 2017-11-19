@@ -2,9 +2,10 @@
   (:require [monger.collection :as mc]
             [mazeboard.data.connection :refer [database]]))
 
-(defn create [inviting-user invited-user]
+(defn create [inviting-user invited-user game-id]
   (mc/insert-and-return database "invites" {:inviting inviting-user
                                             :invited invited-user
+                                            :game-id game-id
                                             :status :created}))
 
 (defn update-status [invite-id status]
