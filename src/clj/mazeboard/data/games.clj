@@ -1,7 +1,8 @@
 (ns mazeboard.data.games
   (:require [monger.collection :as mc]
             [monger.operators :refer :all]
-            [mazeboard.data.connection :refer [database]]))
+            [mazeboard.data.connection :refer [database]])
+  (:import org.bson.types.ObjectId))
 
 (defn create [user-id max-players]
   (mc/insert-and-return database "games" {:created-by user-id
@@ -10,17 +11,17 @@
                                           :players-size 1
                                           :status :created}))
 (defn details [game-id]
-  (mc/find-one-as-map database "games" {:_id game-id}))
+  (mc/find-one-as-map database "games" {:_id (ObjectId. game-id)}))
 
 (defn join [game-id user-id]
   (mc/update database "games"
-             {:_id game-id :players-size {$lt :max-players}
+             {:_id (ObjectId. game-id) :players-size {$lt :max-players}
               :players {$nin [user-id]} :status :created}
              {$addToSet {:players user-id} $inc {:players-size 1}}))
 
 (defn leave [game-id user-id]
   (mc/update database "games"
-             {:_id game-id
+             {:_id (ObjectId. game-id)
               :players {$in [user-id]} :status :created}
              {$pull {:players user-id} $inc {:players-size -1}}))
 
