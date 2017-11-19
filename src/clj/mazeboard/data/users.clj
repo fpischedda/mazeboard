@@ -10,7 +10,7 @@
 (defn all [page page-size]
   (paged-filter database "users" page page-size {}))
 
-(defn create-user [username password]
+(defn create [username password]
   (mc/insert-and-return database "users" {:_id username
                                           :password (get-hash password)}))
 
