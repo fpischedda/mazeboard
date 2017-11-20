@@ -7,19 +7,19 @@
   (let [game (games/create "usera" 2)]
     (success game)))
 
-(defn join [req]
-  (let [res (games/join "game-id" "userb")]
+(defn join [req id]
+  (let [res (games/join id "userb")]
     (success {:res :ok})))
 
-(defn leave [req]
-  (let [res (games/leave "game-id" "userb")]
+(defn leave [req id]
+  (let [res (games/leave id "userb")]
     (success {:res :ok})))
 
 (defn user-games [req]
-  (success "[]"))
+  (success []))
 
-(defn make-move []
-  (success "[]"))
+(defn make-move [req id]
+  (success []))
 
-(defn abandon-game [req]
-  (success "[]"))
+(defn abandon-game [req id]
+  (success []))

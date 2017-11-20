@@ -1,2 +1,3 @@
 {:mongodb "mongodb://127.0.0.1/mazeboard"
- :server {:port 8080}}
+ :auth-secret "3i2u4h98eyfdsjbf390udsfbi1290u"
+ :api-server {:port 8080}}

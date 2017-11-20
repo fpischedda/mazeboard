@@ -1,5 +1,6 @@
 (ns mazeboard.data.invites
   (:require [monger.collection :as mc]
+            [monger.operators :refer :all]
             [mazeboard.data.connection :refer [database]])
   (:import org.bson.types.ObjectId))
 
@@ -10,7 +11,7 @@
                                             :status :created}))
 
 (defn update-status [invite-id status]
-  (mc/update-by-id database "invites" (ObjectId. invite-id) {:status status}))
+  (mc/update-by-id database "invites" (ObjectId. invite-id) {$set { :status status }}))
 
 (defn accept [invite-id]
   (update-status invite-id :accepted))

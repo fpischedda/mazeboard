@@ -1,6 +1,7 @@
 (ns mazeboard.data.games
   (:require [monger.collection :as mc]
             [monger.operators :refer :all]
+            [mazeboard.data.utils :refer [paged-filter]]
             [mazeboard.data.connection :refer [database]])
   (:import org.bson.types.ObjectId))
 
@@ -12,6 +13,9 @@
                                           :status :created}))
 (defn details [game-id]
   (mc/find-one-as-map database "games" {:_id (ObjectId. game-id)}))
+
+(defn by-user [user-id page page-size]
+  (paged-filter database "games" page page-size {:players {$in [user-id]}}))
 
 (defn join [game-id user-id]
   (mc/update database "games"
@@ -25,3 +29,8 @@
               :players {$in [user-id]} :status :created}
              {$pull {:players user-id} $inc {:players-size -1}}))
 
+(defn start [game-id board]
+  (mc/update database "games"
+             {:_id (ObjectId. game-id)
+              :players-size :max-players :status :created}
+             {$set {:status :running :board-history [board]}}))
