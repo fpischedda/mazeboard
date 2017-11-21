@@ -1,17 +1,24 @@
 (ns mazeboard.api.server
   (:require [mazeboard.api.routes :refer [routes]]
             [mazeboard.config :refer [config]]
+            [mazeboard.api.authorization :refer [rules]]
             [mount.core :refer [defstate]]
             [compojure.handler :refer [site]]
             [buddy.auth.backends :as backends]
-            [buddy.auth.middleware :refer (wrap-authentication)]
+            [buddy.auth.middleware :refer [wrap-authentication
+                                           wrap-authorization]]
+            [buddy.auth.accessrules :refer [wrap-access-rules]]
             [org.httpkit.server :refer [run-server]]))
 
 (defonce server-instance (atom nil))
 
 (def auth-backend (backends/jws {:secret (:auth-secret config)}))
 
+(def access-options {:rules rules})
+
 (def app (-> (site #'routes)
+             (wrap-access-rules access-options)
+             (wrap-authorization auth-backend)
              (wrap-authentication auth-backend)))
 
 (defn start []

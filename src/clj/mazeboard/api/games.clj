@@ -1,11 +1,12 @@
 (ns mazeboard.api.games
   (:require
+   [cheshire.core :as json]
    [mazeboard.api.utils :refer [success]]
    [mazeboard.data.games :as games]))
 
 (defn create [req]
-  (let [game (games/create "usera" 2)]
-    (success game)))
+  (let [user (:username (:identity req))]
+    (json/encode (games/create user 2))))
 
 (defn join [req id]
   (let [res (games/join id "userb")]
