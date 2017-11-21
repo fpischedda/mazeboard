@@ -20,7 +20,9 @@
                     (GET "/" [] games/user-games)
                     (POST "/" [] games/create)
                     (context "/:id" [id]
-                             (GET "/" [] games/make-move)
+                             (GET "/" [] games/details)
                              (POST "/move" [] games/make-move)
+                             (POST "/join" [] games/join)
+                             (POST "/leave" [] games/leave)
                              (DELETE "/" [] games/abandon-game)))))
 

@@ -8,6 +8,10 @@
   (let [user (:username (:identity req))]
     (json/encode (games/create user 2))))
 
+(defn details [req]
+  (let [id (:id (:route-params req))]
+    (json/encode (games/details id))))
+
 (defn join [req id]
   (let [res (games/join id "userb")]
     (success {:res :ok})))
