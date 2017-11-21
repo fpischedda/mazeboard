@@ -20,6 +20,7 @@
                  [buddy/buddy-hashers "1.3.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [cheshire "5.8.0"]
+                 [danlentz/clj-uuid "0.1.7"]
                  [cljs-http "0.1.43"]]
   :main ^:skip-aot mazeboard.core
   :plugins [[lein-ring "0.8.11"]
