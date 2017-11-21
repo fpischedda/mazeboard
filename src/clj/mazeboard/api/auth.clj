@@ -8,7 +8,7 @@
 
 (defn get-token-claims [username]
   {:username username
-   :exp (time/plus (time/now) (time/seconds 3600))})
+   :exp (time/plus (time/now) (time/seconds (:session-expiration-seconds config)))})
 
 (defn login
   [request]
