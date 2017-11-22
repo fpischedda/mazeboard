@@ -12,13 +12,15 @@
   (let [id (:id (:route-params req))]
     (json/encode (games/details id))))
 
-(defn join [req id]
-  (let [res (games/join id "userb")]
-    (success {:res :ok})))
+(defn join [req]
+  (let [user (:username (:identity req))
+        id (:id (:route-params req))]
+    (json/encode (games/join id user))))
 
-(defn leave [req id]
-  (let [res (games/leave id "userb")]
-    (success {:res :ok})))
+(defn leave [req]
+  (let [user (:username (:identity req))
+        id (:id (:route-params req))]
+    (json/encode (games/leave id user))))
 
 (defn user-games [req]
   (success []))
