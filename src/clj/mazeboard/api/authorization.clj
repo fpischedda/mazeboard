@@ -8,7 +8,6 @@
 
 (defn authenticated-user
   [request]
-  (println request)
   (if (authenticated? request)
     true
     (error "Only authenticated users allowed")))
