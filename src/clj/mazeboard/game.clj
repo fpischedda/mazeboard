@@ -37,21 +37,21 @@
                  (:row position)
                  (:col position)))
 
-(defn can-move-from-here [position game direction]
+(defn can-move-from-here? [position game direction]
   "returns true if the player can move from the specified position"
   (tile/is-open? direction (tile-at-position position game)))
 
 (def swap-dir {:north :south :east :west :south :north :west :east})
 
-(defn can-move-to-here [position game direction]
+(defn can-move-to-there? [position game direction]
   "returns true if the player can move to this position"
   (tile/is-open? (direction swap-dir) (tile-at-position position game)))
 
 (defn valid-move [position new-position game move]
   "returns true if the new position is valid, false otherwise"
   (and (board/is-inside? (:board game) (:row new-position) (:col new-position))
-       (can-move-from-here position game move)
-       (can-move-to-here new-position game move)))
+       (can-move-from-here? position game move)
+       (can-move-to-there? new-position game move)))
 
 (def move-functions {:north {:row dec :col identity}
                      :south {:row inc :col identity}
