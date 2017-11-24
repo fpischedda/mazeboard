@@ -3,10 +3,10 @@
             [clojure.string :as string]
             [mazeboard.player :as player]
             [mazeboard.board :as board]
-            [mazeboard.handles.local-storage :refer [local-storage]]
-            [mazeboard.handles.navigation :refer [goto]]
-            [mazeboard.handles.session :refer [set-token]]
-            [mazeboard.handles.http :refer [http]]))
+            [mazeboardui.handlers.local-storage :refer [local-storage]]
+            [mazeboardui.handlers.navigation :refer [goto]]
+            [mazeboardui.handlers.session :refer [set-token]]
+            [mazeboardui.handlers.http :refer [http]]))
 
 (enable-console-print!)
 

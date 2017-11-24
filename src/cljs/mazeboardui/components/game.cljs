@@ -1,4 +1,4 @@
-(ns mazeboard.ui.game
+(ns mazeboardui.components.game
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
@@ -19,4 +19,4 @@
 (rum/defc game-view [game]
   [:div
    [:h1 "Mazeboard game client"]
-   [board-view (:board @game)]])
+   [board-view (:board game)]])

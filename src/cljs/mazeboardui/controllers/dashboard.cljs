@@ -1,18 +1,18 @@
-(ns mazeboard.controllers.dashboard
+(ns mazeboardui.controllers.dashboard
   (:require
    [hbfe.config :as config]
    [clojure.string :refer [split]]))
 
 (defn auth-header [token]
-  {"X-Auth-Token" token})
+  {"Authorization" (str "Token " token)})
 
-(defn load-repos-effect [token]
+(defn load-games-effect [token]
   {:http
-   {:url config/repository-list-url
+   {:url config/game-list-url
     :method :get
     :params {:headers (auth-header token)}
-    :success-fn :repo-list-loaded
-    :error-fn :repo-list-loaded-error}})
+    :success-fn :game-list-loaded
+    :error-fn :game-list-loaded-error}})
 
 (def initial-state {})
 
@@ -24,68 +24,63 @@
 (defmethod control :set-token [event [token] state]
   {:state (assoc state :token token)})
 
-(defmethod control :load-repos [event args state]
-  (load-repos-effect (:token state)))
+(defmethod control :load-games [event args state]
+  (load-games-effect (:token state)))
 
-(defmethod control :repo-list-loaded [event [response] state]
-  (let [repositories (:body response)]
-    {:state (assoc state :repositories repositories)}))
+(defmethod control :game-list-loaded [event [response] state]
+  (let [gamesitories (:body response)]
+    {:state (assoc state :gamesitories gamesitories)}))
 
-(defmethod control :repo-list-loaded-error [event args state]
+(defmethod control :game-list-loaded-error [event args state]
   {:state state})
 
-(defmethod control :delete-repo [event [repo-id] state]
+(defmethod control :delete-game [event [game-id] state]
   {:state state
-   :http {:url (config/repository-detail-url repo-id)
+   :http {:url (config/gamesitory-detail-url game-id)
           :method :delete
           :params {:headers (auth-header (:token state))}
-          :success-fn :repo-deleted-successful
-          :error-fn :repo-deleted-error}})
+          :success-fn :game-deleted-successful
+          :error-fn :game-deleted-error}})
 
-(defmethod control :repo-deleted-successful [event args state]
-  (load-repos-effect (:token state)))
+(defmethod control :game-deleted-successful [event args state]
+  (load-games-effect (:token state)))
 
-(defmethod control :repo-deleted-error [event args state]
+(defmethod control :game-deleted-error [event args state]
   {:state state})
 
-(defmethod control :create-repo [event args state]
+(defmethod control :create-game [event args state]
   (let [[name url branches targets] args
         tracked-branches (split branches #" ")
         target-list (split targets #" ")]
     {:state state
-     :http {:url config/repository-new-url
+     :http {:url config/gamesitory-new-url
             :method :post
-            :success-fn :repo-created-successful
-            :error-fn :repo-created-error
+            :success-fn :game-created-successful
+            :error-fn :game-created-error
             :params {:headers (auth-header (:token state))
                      :json-params {:name name
                                    :url url
                                    :tracked_branches tracked-branches
                                    :targets target-list}}}}))
 
-(defmethod control :repo-created-successful [event args state]
-  (load-repos-effect (:token state)))
+(defmethod control :game-created-successful [event args state]
+  (load-games-effect (:token state)))
 
-(defmethod control :repo-created-error [event args state]
+(defmethod control :game-created-error [event args state]
   {:state state})
 
-(defmethod control :update-repo [event args state]
-  (let [[repo-id name url branches targets] args
-        tracked-branches (split branches #" ")
-        target-list (split targets #" ")]
+(defmethod control :update-game [event args state]
+  (let [[game-id max-users] args]
     {:state state
-     :http {:url (config/repository-detail-url repo-id)
+     :http {:url (config/game-detail-url game-id)
             :method :patch
-            :success-fn :repo-updated-successful
-            :error-fn :repo-updated-error
+            :success-fn :game-updated-successful
+            :error-fn :game-updated-error
             :params {:headers (auth-header (:token state))
-                     :json-params {:name name
-                                   :url url
-                                   :tracked_branches tracked-branches
-                                   :targets target-list}}}}))
+                     :json-params {:max-players max-players}}}}))
 
-(defmethod control :repo-updated-successful [event args state]
-  (load-repos-effect (:token state)))
+(defmethod control :game-updated-successful [event args state]
+  (load-games-effect (:token state)))
 
-(defmethod control :repo-updated-error [event args state]
+(defmethod control :game-updated-error [event args state]
   {:state state})

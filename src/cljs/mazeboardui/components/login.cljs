@@ -1,12 +1,12 @@
-(ns mazeboard.components.login
+(ns mazeboardui.components.login
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
    [cljs.core.async :refer [<!]]
-   [hbfe.dom :as dom]
-   [hbfe.utils :refer [error-message show-message label-input]]
-   [hbfe.config :as config]))
+   [mazeboardui.dom :as dom]
+   [mazeboardui.utils :refer [error-message show-message label-input]]
+   [mazeboardui.config :as config]))
 
 (rum/defc login-button [r]
   [:button {:on-click #(citrus/dispatch! r
@@ -19,7 +19,7 @@
 (rum/defc login < rum/reactive [r]
   (let [{error :error profile :profile} (rum/react (citrus/subscription r [:login]))]
     [:div.login-box
-     [:h2 "HaxeBuilder Dashboard"]
+     [:h2 "Mazeboard Dashboard"]
      [:div.login-form
       (label-input "Username"
                    {:type "text" :name "username" :id "username"})

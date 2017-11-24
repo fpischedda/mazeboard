@@ -1,4 +1,4 @@
-(ns mazeboard.controllers.login
+(ns mazeboardui.controllers.login
   (:require
    [hbfe.config :as config]))
 
@@ -38,18 +38,18 @@
                                    :password password}}}}))
 
 (defmethod control :login-successful [event [response] state]
-  (let [{:keys [error token username email]} (:body response)
+  (let [{:keys [error token username]} (:body response)
         profile {:profile {:token token
                            :username username
                            :email email}}]
-    (if (nil? error)
+    (if (nil? errors)
       {:state profile
        :local-storage {:op :set
                        :key :profile
                        :value (.stringify js/JSON (clj->js profile))}
        :set-token (get-in profile [:profile :token])
        :goto {:url "/"}}
-      {:state {:error (:message error)}})))
+      {:state {:error (get-in [0 :text] errors)}})))
 
 (defmethod control :login-error [event args state]
   {:state {:error "Network error, please try again in a minute"}})
