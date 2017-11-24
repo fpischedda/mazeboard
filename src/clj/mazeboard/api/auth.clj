@@ -13,21 +13,28 @@
 (defn login
   [request]
   (let [data (:params request)
-        user-exists (users/exists (:username data)
+        username (:username data)
+        user-exists (users/exists username
                                   (:password data))
-        claims (get-token-claims (:username data))
+        claims (get-token-claims username)
         token (jwt/sign claims (:auth-secret config))]
     (if user-exists
-      (json/encode {:token token})
+      (json/encode {:token token
+                    :username username})
       (json/encode {:errors [{:code :user-not-found
                               :text "user not found"}]}))))
 
 (defn register [req]
   (let [data (:params req)
-        user-id (:_id (users/create (:username data) (:password data)))
-        claims (get-token-claims (:username data))
+        username (:username data)
+        user-id (:_id (users/create
+                       username
+                       (:email email)
+                       (:password data)))
+        claims (get-token-claims username)
         token (jwt/sign claims (:auth-secret config))]
     (if user-id
-      (json/encode {:token token})
+      (json/encode {:token token
+                    :username username})
       (json/encode {:errors [{:code :unable-to-register
                               :text "unable to register"}]}))))
