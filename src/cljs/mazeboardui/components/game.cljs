@@ -2,7 +2,7 @@
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
-   [mazeboad.utils :refer [tile-wall-classes]]))
+   [mazeboardui.utils :refer [tile-wall-classes]]))
 
 (rum/defc tile-view [tile player]
   [:div.tile {:class (tile-wall-classes tile)}

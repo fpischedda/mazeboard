@@ -28,10 +28,7 @@
                     :dashboard
                     :update-game
                     game-id
-                    name
-                    url
-                    branches
-                    targets))
+                    max-players))
 
 (rum/defc game-update [r game-id]
   [:button {:on-click (fn [e]
@@ -54,7 +51,7 @@
   [:button {:on-click (fn[e]
                         (create-game r
                                      (dom/value
-                                      (dom/q "#max-players")))))}
+                                      (dom/q "#max-players"))))}
    "Create game"])
 
 (rum/defc game-form-new [r]

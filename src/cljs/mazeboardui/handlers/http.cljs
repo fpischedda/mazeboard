@@ -1,4 +1,4 @@
-(ns mazeboard.handlers.http
+(ns mazeboardui.handlers.http
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
    [citrus.core :as citrus]

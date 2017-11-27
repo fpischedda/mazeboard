@@ -1,6 +1,6 @@
 (ns mazeboardui.controllers.login
   (:require
-   [hbfe.config :as config]))
+   [mazeboardui.config :as config]))
 
 (def initial-state {})
 

@@ -1,4 +1,4 @@
-(ns mazeboard.handlers.navigation
+(ns mazeboardui.handlers.navigation
   (:require
    [accountant.core :refer [navigate!]]))
 

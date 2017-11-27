@@ -1,4 +1,4 @@
-(ns hbfe.dom
+(ns mazeboardui.dom
   (:require
    [clojure.string :as str]
    [goog.dom.classes :as classes]))

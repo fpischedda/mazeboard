@@ -12,6 +12,7 @@
                  [compojure "1.6.0"]
                  [ring "1.6.3"]
                  [rum "0.10.8"]
+                 [org.roman01la/citrus "3.0.0"]
                  [bidi "2.1.2"]
                  [kibu/pushy "0.3.8"]
                  [venantius/accountant "0.2.0"]

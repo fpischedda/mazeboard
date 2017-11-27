@@ -3,6 +3,10 @@
             [clojure.string :as string]
             [mazeboard.player :as player]
             [mazeboard.board :as board]
+            [mazeboardui.components.app :as app]
+            [mazeboardui.controllers.dashboard :as dashboard]
+            [mazeboardui.controllers.login :as login]
+            [mazeboardui.controllers.router :as router]
             [mazeboardui.handlers.local-storage :refer [local-storage]]
             [mazeboardui.handlers.navigation :refer [goto]]
             [mazeboardui.handlers.session :refer [set-token]]
@@ -44,11 +48,8 @@
   :path-exists? (fn [path]
                   (boolean (bidi/match-route routes path)))})
 ;; render
-(rum/mount (ui/App reconciler)
+(rum/mount (app/App reconciler)
            (dom/q "#app"))
-(reagent/render-component [game-view app-state]
-                          (. js/document (getElementById "app")))
-
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on

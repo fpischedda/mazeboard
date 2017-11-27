@@ -1,5 +1,6 @@
-(ns mazeboard.utils
+(ns mazeboardui.utils
   (:require
+   [clojure.string :as string]
    [rum.core :as rum]))
 
 
