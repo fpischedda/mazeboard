@@ -29,7 +29,7 @@
         username (:username data)
         user-id (:_id (users/create
                        username
-                       (:email email)
+                       (:email data)
                        (:password data)))
         claims (get-token-claims username)
         token (jwt/sign claims (:auth-secret config))]
