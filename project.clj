@@ -27,7 +27,7 @@
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2.1"]
             [lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.0-3"]
+            [lein-figwheel "0.5.10-SNAPSHOT"]
             [org.clojure/tools.nrepl "0.2.12"]]
   :ring {:handler mazeboard.api/handler}
   :source-paths ["src/clj" "src/cljc"]
