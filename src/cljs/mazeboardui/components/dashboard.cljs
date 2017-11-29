@@ -1,4 +1,4 @@
-(ns mazeboardui.components.dashboard
+(ns mazeboard.ui.components.dashboard
   (:require
    [accountant.core :refer [navigate!]]
    [citrus.core :as citrus]
@@ -6,9 +6,9 @@
    [rum.core :as rum]
    [cljs-http.client :as http]
    [cljs.core.async :refer [<!]]
-   [mazeboardui.dom :as dom]
-   [mazeboardui.utils :refer [error-message show-message input label-input]]
-   [mazeboardui.config :as config]))
+   [mazeboard.ui.dom :as dom]
+   [mazeboard.ui.utils :refer [error-message show-message input label-input]]
+   [mazeboard.ui.config :as config]))
 
 (defn toggle-game-editing [game-id]
   (let [show-elem (dom/q (str "#item-show-" game-id))

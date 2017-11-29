@@ -1,4 +1,4 @@
-(ns mazeboard.router
+(ns mazeboard.ui.router
   (:require [bidi.bidi :as bidi]
             [pushy.core :as pushy]))
 

@@ -1,4 +1,4 @@
-(ns mazeboard.components.profile
+(ns mazeboard.ui.components.profile
   (:require
    [rum.core :as rum]
    ))

@@ -1,10 +1,10 @@
-(ns mazeboardui.app
+(ns mazeboard.ui.app
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
-   [mazeboardui.components.dashboard :as dashboard]
-   [mazeboardui.components.profile :as profile]
-   [mazeboardui.components.login :as login]))
+   [mazeboard.ui.components.dashboard :as dashboard]
+   [mazeboard.ui.components.profile :as profile]
+   [mazeboard.ui.components.login :as login]))
 
 (rum/defc App < rum/reactive [r]
   (let [{route :handler params :route-params} (rum/react (citrus/subscription r [:router]))

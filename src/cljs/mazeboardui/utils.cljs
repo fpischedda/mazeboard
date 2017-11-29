@@ -1,4 +1,4 @@
-(ns mazeboardui.utils
+(ns mazeboard.ui.utils
   (:require
    [clojure.string :as string]
    [rum.core :as rum]))

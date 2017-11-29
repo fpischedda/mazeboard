@@ -1,16 +1,16 @@
-(ns mazeboardui.core
+(ns mazeboard.ui.core
   (:require [rum.core :as rum]
             [clojure.string :as string]
             [mazeboard.player :as player]
             [mazeboard.board :as board]
-            [mazeboardui.components.app :as app]
-            [mazeboardui.controllers.dashboard :as dashboard]
-            [mazeboardui.controllers.login :as login]
-            [mazeboardui.controllers.router :as router]
-            [mazeboardui.handlers.local-storage :refer [local-storage]]
-            [mazeboardui.handlers.navigation :refer [goto]]
-            [mazeboardui.handlers.session :refer [set-token]]
-            [mazeboardui.handlers.http :refer [http]]))
+            [mazeboard.ui.components.app :as app]
+            [mazeboard.ui.controllers.dashboard :as dashboard]
+            [mazeboard.ui.controllers.login :as login]
+            [mazeboard.ui.controllers.router :as router]
+            [mazeboard.ui.handlers.local-storage :refer [local-storage]]
+            [mazeboard.ui.handlers.navigation :refer [goto]]
+            [mazeboard.ui.handlers.session :refer [set-token]]
+            [mazeboard.ui.handlers.http :refer [http]]))
 
 (enable-console-print!)
 

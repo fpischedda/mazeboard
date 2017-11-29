@@ -1,6 +1,6 @@
-(ns mazeboardui.controllers.dashboard
+(ns mazeboard.ui.controllers.dashboard
   (:require
-   [mazeboardui.config :as config]
+   [mazeboard.ui.config :as config]
    [clojure.string :refer [split]]))
 
 (defn auth-header [token]

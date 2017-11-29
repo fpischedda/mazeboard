@@ -1,4 +1,4 @@
-(ns mazeboardui.handlers.local-storage
+(ns mazeboard.ui.handlers.local-storage
   (:require
    [citrus.core :as citrus]))
 

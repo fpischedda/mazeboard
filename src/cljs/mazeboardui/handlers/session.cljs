@@ -1,4 +1,4 @@
-(ns mazeboardui.handlers.session
+(ns mazeboard.ui.handlers.session
   (:require
    [citrus.core :refer [broadcast-sync!]]))
 

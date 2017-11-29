@@ -1,8 +1,8 @@
-(ns mazeboardui.components.game
+(ns mazeboard.ui.components.game
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
-   [mazeboardui.utils :refer [tile-wall-classes]]))
+   [mazeboard.ui.utils :refer [tile-wall-classes]]))
 
 (rum/defc tile-view [tile player]
   [:div.tile {:class (tile-wall-classes tile)}

@@ -1,4 +1,4 @@
-(ns mazeboardui.controllers.router
+(ns mazeboard.ui.controllers.router
   (:require
    [bidi.bidi :as bidi]))
 

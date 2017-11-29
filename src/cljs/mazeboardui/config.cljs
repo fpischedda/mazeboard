@@ -1,4 +1,4 @@
-(ns mazeboardui.config)
+(ns mazeboard.ui.config)
 
 (def api-url "http://localhost:8080/api/v1/")
 

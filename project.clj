@@ -46,9 +46,9 @@
               [{:id "dev"
                 :source-paths ["src/cljs" "src/cljc"]
 
-                :figwheel {:on-jsload "mazeboardui.core/on-js-reload"}
+                :figwheel {:on-jsload "mazeboard.ui.core/on-js-reload"}
 
-                :compiler {:main mazeboardui.core
+                :compiler {:main mazeboard.ui.core
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/mazeboardui.js"
                            :output-dir "resources/public/js/compiled/out"
@@ -57,9 +57,9 @@
                ;; production. You can build this with:
                ;; lein cljsbuild once min
                {:id "min"
-                :source-paths ["src/cljs" "src/common"]
+                :source-paths ["src/cljs" "src/cljc"]
                 :compiler {:output-to "resources/public/js/compiled/mazeboardui.js"
-                           :main mazeboardui.core
+                           :main mazeboard.ui.core
                            :optimizations :advanced
                            :pretty-print false}}]}
 

@@ -1,12 +1,12 @@
-(ns mazeboardui.components.login
+(ns mazeboard.ui.components.login
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
    [cljs.core.async :refer [<!]]
-   [mazeboardui.dom :as dom]
-   [mazeboardui.utils :refer [error-message show-message label-input]]
-   [mazeboardui.config :as config]))
+   [mazeboard.ui.dom :as dom]
+   [mazeboard.ui.utils :refer [error-message show-message label-input]]
+   [mazeboard.ui.config :as config]))
 
 (rum/defc login-button [r]
   [:button {:on-click #(citrus/dispatch! r

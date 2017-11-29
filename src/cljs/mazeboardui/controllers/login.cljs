@@ -1,6 +1,6 @@
-(ns mazeboardui.controllers.login
+(ns mazeboard.ui.controllers.login
   (:require
-   [mazeboardui.config :as config]))
+   [mazeboard.ui.config :as config]))
 
 (def initial-state {})
 
