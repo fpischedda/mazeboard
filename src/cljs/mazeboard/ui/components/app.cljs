@@ -1,4 +1,4 @@
-(ns mazeboard.ui.app
+(ns mazeboard.ui.components.app
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]

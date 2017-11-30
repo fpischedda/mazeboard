@@ -4,7 +4,9 @@
    ))
 
 (rum/defc bar [{:keys [token username email]}]
-  [:div.profile "User profile"
+  [:div.profile
    (if (nil? token)
      [:a {:href "/login"} "Login"]
-     [:span.account (str "Hello " username)])])
+     [:div
+      [:span.greeting (str "Hello " username)]
+      [:span.logout [:a {:href "/logout"} "Logout"]]])])

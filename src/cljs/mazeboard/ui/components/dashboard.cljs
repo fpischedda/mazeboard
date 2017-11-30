@@ -55,7 +55,7 @@
    "Create game"])
 
 (rum/defc game-form-new [r]
-  [:ul.new-game-form "Track new game"
+  [:ul.new-game-form "Create new game"
    [:li (label-input "Max players"
                     {:type "text" :name "max-players" :id "max-players"})]
    [:li (game-new-button r)]])

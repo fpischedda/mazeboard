@@ -4,19 +4,19 @@
    [rum.core :as rum]
    [mazeboard.ui.utils :refer [tile-wall-classes]]))
 
-(rum/defc tile-view [tile player]
+(rum/defc tile [tile player]
   [:div.tile {:class (tile-wall-classes tile)}
    (when (not (nil? player)) (:name player))])
 
-(rum/defc board-row-view [row]
+(rum/defc board-row [row]
   [:div.board-row
-   (doall (for [tile row] (tile-view tile player)))])
+   (doall (for [tile row] (tile tile nil)))])
 
-(rum/defc board-view [board]
+(rum/defc board [board]
   [:div.board
-   (doall (for [row (:tiles board)] (board-row-view row)))])
+   (doall (for [row (:tiles board)] (board-row row)))])
 
-(rum/defc game-view [game]
+(rum/defc game [game]
   [:div
    [:h1 "Mazeboard game client"]
-   [board-view (:board game)]])
+   [board (:board game)]])

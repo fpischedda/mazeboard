@@ -17,6 +17,7 @@
                  [kibu/pushy "0.3.8"]
                  [venantius/accountant "0.2.0"]
                  [org.roman01la/citrus "3.0.0"]
+                 [garden "1.3.3"]
                  [com.novemberain/monger "3.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
                  [buddy/buddy-auth "2.1.0"]
@@ -27,7 +28,8 @@
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2.1"]
             [lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.10-SNAPSHOT"]
+            [lein-garden "0.3.0"]
+            [lein-figwheel "0.5.14"]
             [org.clojure/tools.nrepl "0.2.12"]]
   :ring {:handler mazeboard.api/handler}
   :source-paths ["src/clj" "src/cljc"]
@@ -43,26 +45,25 @@
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :cljsbuild {:builds
-              [{:id "dev"
-                :source-paths ["src/cljs" "src/cljc"]
-
-                :figwheel {:on-jsload "mazeboard.ui.core/on-js-reload"}
-
-                :compiler {:main mazeboard.ui.core
-                           :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/mazeboardui.js"
-                           :output-dir "resources/public/js/compiled/out"
-                           :source-map-timestamp true}}
-               ;; This next build is an compressed minified build for
-               ;; production. You can build this with:
-               ;; lein cljsbuild once min
-               {:id "min"
-                :source-paths ["src/cljs" "src/cljc"]
-                :compiler {:output-to "resources/public/js/compiled/mazeboardui.js"
-                           :main mazeboard.ui.core
-                           :optimizations :advanced
-                           :pretty-print false}}]}
-
+              [{:id "dev",
+                :source-paths ["src/cljs" "src/cljc"],
+                :figwheel {:on-jsload "mazeboard.ui.core/on-js-reload"},
+                :compiler
+                {:main mazeboard.ui.core,
+                 :asset-path "js/compiled/out",
+                 :output-to "resources/public/js/compiled/mazeboardui.js",
+                 :output-dir "resources/public/js/compiled/out",
+                 :source-map-timestamp true}}
+               {:id "min",
+                :source-paths ["src/cljs" "src/cljc"],
+                :compiler
+                {:output-to "resources/public/js/compiled/mazeboardui.js",
+                 :main mazeboard.ui.core,
+                 :optimizations :advanced,
+                 :pretty-print false}}],}
+  :garden {:builds [{:source-paths ["src/clj"]
+                     :stylesheet mazeboard.ui.stylesheets.core/style
+                     :compiler {:output-to "resources/public/css/style.css"}}]}
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
              ;; :server-ip "127.0.0.1"
