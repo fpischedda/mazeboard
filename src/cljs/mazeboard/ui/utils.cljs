@@ -1,7 +1,8 @@
 (ns mazeboard.ui.utils
   (:require
    [clojure.string :as string]
-   [rum.core :as rum]))
+   [rum.core :as rum]
+   [clojure.string :as str]))
 
 
 (rum/defc input [type name value]
@@ -36,3 +37,9 @@
   (string/join " " (map #(-> % name
                              keyword-to-class)
                         (solid-wall-names tile))))
+
+(defn str->obj [text]
+  (js->clj (.parse js/JSON text) :keywordize-keys true))
+
+(defn obj->str [obj]
+  (.stringify js/JSON (clj->js obj)))

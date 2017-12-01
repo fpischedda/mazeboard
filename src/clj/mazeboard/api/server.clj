@@ -3,7 +3,9 @@
             [mazeboard.config :refer [config]]
             [mazeboard.api.authorization :refer [rules]]
             [mount.core :refer [defstate]]
-            [compojure.handler :refer [site]]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.json :refer [wrap-json-params]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication
                                            wrap-authorization]]
@@ -12,9 +14,16 @@
 
 (defonce server-instance (atom nil))
 
+(def mazeboard-defaults (assoc site-defaults :security {:anti-forgery false}))
 (def auth-backend (backends/jws {:secret (:auth-secret config)}))
 
 (def access-options {:rules rules})
+
+(defn wrap-default-headers
+  [handler]
+  (fn [request]
+    (let [response (handler request)]
+      (assoc-in response [:headers "Content-Type"] "application/json"))))
 
 (defn allow-cross-origin
   "middleware function to allow cross origin"
@@ -23,13 +32,16 @@
     (let [response (handler request)]
       (-> response
           (assoc-in [:headers "Access-Control-Allow-Origin"]  "*")
-          (assoc-in [:headers "Access-Control-Allow-Methods"] "GET,PUT,POST,DELETE,OPTIONS")
-          (assoc-in [:headers "Access-Control-Allow-Headers"] "X-Requested-With,Content-Type,Cache-Control")))))
+          (assoc-in [:headers "Access-Control-Allow-Methods"] "GET,PUT,POST,PATCH,DELETE,OPTIONS")
+          (assoc-in [:headers "Access-Control-Allow-Headers"] "X-Requested-With,Content-Type,Cache-Control, Authorization")))))
 
-(def app (-> (site #'routes)
-             (allow-cross-origin)
+(def app (-> (wrap-defaults #'routes mazeboard-defaults)
+             (wrap-keyword-params)
+             (wrap-json-params)
+             (wrap-default-headers)
              (wrap-access-rules access-options)
              (wrap-authorization auth-backend)
+             (allow-cross-origin)
              (wrap-authentication auth-backend)))
 
 (defn start []

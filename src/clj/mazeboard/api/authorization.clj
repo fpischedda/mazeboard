@@ -17,5 +17,8 @@
             {:pattern #"^/api/v1/register$"
              :handler any-access}
             {:pattern #"^/.*"
+             :handler any-access
+             :request-method :options}
+            {:pattern #"^/.*"
              :handler authenticated-user}
             ])

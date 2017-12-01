@@ -28,8 +28,8 @@
   (load-games-effect (:token state)))
 
 (defmethod control :game-list-loaded [event [response] state]
-  (let [gamesitories (:body response)]
-    {:state (assoc state :gamesitories gamesitories)}))
+  (let [games (:body response)]
+    {:state (assoc state :games games)}))
 
 (defmethod control :game-list-loaded-error [event args state]
   {:state state})
@@ -49,19 +49,15 @@
   {:state state})
 
 (defmethod control :create-game [event args state]
-  (let [[name url branches targets] args
-        tracked-branches (split branches #" ")
-        target-list (split targets #" ")]
+  (let [[max-players] args]
     {:state state
      :http {:url config/game-new-url
             :method :post
             :success-fn :game-created-successful
             :error-fn :game-created-error
             :params {:headers (auth-header (:token state))
-                     :json-params {:name name
-                                   :url url
-                                   :tracked_branches tracked-branches
-                                   :targets target-list}}}}))
+                     :with-credentials? false
+                     :json-params {:max-players max-players}}}}))
 
 (defmethod control :game-created-successful [event args state]
   (load-games-effect (:token state)))
@@ -77,6 +73,7 @@
             :success-fn :game-updated-successful
             :error-fn :game-updated-error
             :params {:headers (auth-header (:token state))
+                     :with-credentials? false
                      :json-params {:max-players max-players}}}}))
 
 (defmethod control :game-updated-successful [event args state]

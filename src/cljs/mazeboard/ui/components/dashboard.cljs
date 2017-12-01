@@ -17,10 +17,12 @@
     (dom/toggle-class! edit-elem "hidden")))
 
 (rum/defc game-delete [r game-id]
-  [:button {:on-click #(citrus/dispatch! r
-                                         :dashboard
-                                         :delete-game
-                                         game-id)}
+  [:button {:on-click (fn [e]
+                          (toggle-game-editing game-id)
+                          (citrus/dispatch! r
+                                            :dashboard
+                                            :delete-game
+                                            game-id))}
    "Delete"])
 
 (defn update-game [r game-id max-players]
@@ -35,7 +37,7 @@
                         (toggle-game-editing game-id)
                         (update-game r game-id
                                      (dom/value
-                                      (dom/q (str "#max-palyers-" game-id)))))}
+                                      (dom/q (str "#max-players-" game-id)))))}
    "Update"])
 
 (rum/defc game-cancel-edit [game_id]
@@ -45,7 +47,7 @@
   (citrus/dispatch! r
                     :dashboard
                     :create-game
-                    name))
+                    max-players))
 
 (rum/defc game-new-button [r]
   [:button {:on-click (fn[e]
@@ -66,15 +68,16 @@
     (join sep value)))
 
 (rum/defc game-item [r item]
-  (let [{:keys [_id status max-players free-player-slots players]} item]
+  (let [{:keys [_id status created-by max-players free-player-slots players]} item]
     [:tr.item {:on-click (fn [e] (toggle-game-editing _id)) :id (str "item-show-" _id) :key _id}
-      [:td status] [:td max-players] [:td free-player-slots] [:td (single-or-list players " ")] [:td (game-delete r _id)]]))
+     [:td status] [:td created-by] [:td max-players] [:td free-player-slots] [:td (single-or-list players " ")] [:td ""]]))
 
 (rum/defc game-edit-item [r item]
-  (let [{:keys [_id status max-players free-player-slots players]} item]
+  (let [{:keys [_id created-by status max-players free-player-slots players]} item]
     [:tr.item-edit.hidden {:id (str "item-edit-" _id) :key _id}
      [:td status]
-     [:td (input "text" (str "max-players"  _id) max-players)]
+     [:td created-by]
+     [:td (input "text" (str "max-players-"  _id) max-players)]
      [:td free-player-slots]
      [:td (single-or-list players " ")]
      [:td (game-delete r _id) (game-update r _id) (game-cancel-edit _id)]]))
@@ -96,13 +99,13 @@
    [:table.game-list
     [:thead
      [:tr
-      [:td "Status"] [:td "Max players"] [:td "Slots left"] [:td "Players"] [:td ""]]]
+      [:td "Status"] [:td "Created by"] [:td "Max players"] [:td "Slots left"] [:td "Players"] [:td ""]]]
     [:tbody
      (map #(game-lines r %1) games)]]
    [:div.new-game (game-form-new r)]])
 
 (rum/defc dashboard < rum/reactive [r]
-  (let [{:keys [token games job-list]} (rum/react (citrus/subscription r [:dashboard]))]
+  (let [{:keys [token games]} (rum/react (citrus/subscription r [:dashboard]))]
     (cond
       (nil? token) (navigate! "/login")
       (nil? games) (citrus/dispatch! r

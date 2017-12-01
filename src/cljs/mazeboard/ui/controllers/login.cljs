@@ -1,6 +1,7 @@
 (ns mazeboard.ui.controllers.login
   (:require
-   [mazeboard.ui.config :as config]))
+   [mazeboard.ui.config :as config]
+   [mazeboard.ui.utils :refer [str->obj obj->str]]))
 
 (def initial-state {})
 
@@ -19,7 +20,7 @@
     :on-ready :profile-loaded}})
 
 (defmethod control :profile-loaded [_ [raw-profile]]
-  (let [profile (js->clj (.parse js/JSON raw-profile) :keywordize-keys true)]
+  (let [profile (str->obj raw-profile)]
     (if-not (nil? profile)
     {:state profile
      :set-token (get-in profile [:profile :token])
@@ -34,19 +35,20 @@
             :success-fn :login-successful
             :error-fn :login-error
             :params {:with-credentials? false
-                     :form-params {:username username
+                     :json-params {:username username
                                    :password password}}}}))
 
 (defmethod control :login-successful [event [response] state]
-  (let [{:keys [errors token username]} (:body response)
+  (let [body (:body response)
+        {:keys [token username errors]} body
         profile {:profile {:token token
                            :username username}}]
     (if (nil? errors)
       {:state profile
        :local-storage {:op :set
                        :key :profile
-                       :value (.stringify js/JSON (clj->js profile))}
-       :set-token (get-in profile [:profile :token])
+                       :value (obj->str profile)}
+       :set-token token
        :goto {:url "/"}}
       {:state {:error (get-in [0 :text] errors)}})))
 

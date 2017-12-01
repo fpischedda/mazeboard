@@ -4,7 +4,7 @@
 
 (def login-url (str api-url "login"))
 (def profile-url (str api-url "profile"))
-(def game-list-url (str api-url "game/"))
-(def game-new-url (str api-url "game/"))
+(def game-list-url (str api-url "games/"))
+(def game-new-url (str api-url "games/"))
 (defn game-detail-url [game-id]
   (str game-list-url game-id "/"))

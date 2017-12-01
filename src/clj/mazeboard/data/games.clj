@@ -42,3 +42,22 @@
               :free-player-slots 0
               :status :created}
              {$set {:status :running :board-history [board]}}))
+
+(defn close [game-id user]
+  (let [res (mc/update database "games"
+                       {:_id game-id
+                        :created-by user}
+                       {$set {:status :closed}})]
+    (if (updated-existing? res)
+      {:res :ok}
+      {:errors [{:code :cannot-close-game :text "cannot close game"}]})))
+
+(defn update [game-id user max-players]
+  (let [res (mc/update database "games"
+                       {:_id game-id
+                        :status :created
+                        :created-by user}
+                       {$set {:max-players max-players}})]
+    (if (updated-existing? res)
+      {:res :ok}
+      {:errors [{:code :cannot-update-game :text "cannot update game"}]})))
