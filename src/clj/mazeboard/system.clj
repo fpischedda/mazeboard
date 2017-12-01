@@ -1,18 +1,10 @@
 (ns mazeboard.system
-  (require [mount.core :refer [defstate]]))
+  (:require [mount.core :refer [defstate]]
+            [mazeboard.config :refer [config]]
+            [mazeboard.data.connection :refer [database]]
+            [mazeboard.api.server :refer [server]]))
 
-(defn create-web-server
-  "creates a web serverv"
-  []
-  ())
-
-(defn destroy-web-server
-  "destroy the web serverv"
-  [server]
-  ())
-
-(defn destroy-web-server [] ())
-
-(defstate web-server
-  :start (create-web-server)
-  :stop (destroy-web-server web-server))
+(defstate system
+  :start {:config config
+          :database database
+          :server server})
