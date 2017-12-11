@@ -3,7 +3,7 @@
   :url "https://francesco.pischedda.info"
   :license {:name "AGPL V3 License"
             :url "https://www.gnu.org/licenses/agpl-3.0.en.html"}
-  :dependencies [[org.clojure/clojure "1.9.0-beta4"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.9.946"]
                  [http-kit "2.2.0"]
                  [yogthos/config "0.9"]
