@@ -61,3 +61,10 @@
     (if (updated-existing? res)
       {:res :ok}
       {:errors [{:code :cannot-update-game :text "cannot update game"}]})))
+
+(defn current-turn [game-id]
+  (let [game (mc/find-one-as-map database "games"
+                                 {:_id game-id :status :started}
+                                 {:turns {"$slice" -1}})]
+    (when-not (nil? game)
+      (get-in game [:turns 0]))))
