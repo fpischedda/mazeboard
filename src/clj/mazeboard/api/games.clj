@@ -2,7 +2,8 @@
   (:require
    [cheshire.core :as json]
    [mazeboard.api.utils :refer [success]]
-   [mazeboard.data.games :as games]))
+   [mazeboard.data.games :as games]
+   [mazeboard.game :as game-logic]))
 
 (defn game-id [req]
   "returns the game id taking it from the request parameters"
@@ -37,16 +38,18 @@
         max-players (Integer. (:max-players (:params req)))]
     (json/encode (games/update id user max-players))))
 
-(defn turn-options [req]
-  "returns the current user's turn options"
-  (let [turn (games/current-turn (game-id req))
-        user (:username (:identity req))]
-    (if (= (:user turn) user)
-      (json/encode (:options turn))
-      (json/encode []))))
+(defn current-turn [req]
+  "returns the current turn with options"
+  (json/encode (games/current-turn (game-id req))))
 
 (defn apply-turn [req]
-  (success []))
+  (let [id (game-id req)
+        user (:username (:identity req))
+        move (:move (:params req))
+        turn (games/current-turn id)]
+    (if-let [errors (game-logic/validate-move-format turn move)]
+      (json-encode errors)
+      (josn/encode (game-logic/handle-turn turn move user)))))
 
 (defn abandon-game [req]
   (let [id (game-id req)
