@@ -109,8 +109,8 @@
      (handle-movement game move-data)
      (handle-rotation game move-data))))
 
-(defn validat-move-format [game move user]
-  (let [player (get-current-player game)]
+(defn validate-move-format [game move user]
+  (let [player (game-current-player game)]
     (if-not (= user (:username player))
       {:errors [{:type :wrong-player}]}
       (when-not (contains? #{:move :rotate} (:type move))

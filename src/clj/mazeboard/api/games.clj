@@ -48,8 +48,8 @@
         move (:move (:params req))
         turn (games/current-turn id)]
     (if-let [errors (game-logic/validate-move-format turn move)]
-      (json-encode errors)
-      (josn/encode (game-logic/handle-turn turn move user)))))
+      (json/encode errors)
+      (json/encode (game-logic/handle-turn turn move user)))))
 
 (defn abandon-game [req]
   (let [id (game-id req)
