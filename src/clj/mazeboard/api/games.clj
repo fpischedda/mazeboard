@@ -32,11 +32,11 @@
   (let [user (:username (:identity req))]
     (json/encode (games/by-user user 0 10))))
 
-(defn update [req]
+(defn update-max-players [req]
   (let [id (game-id req)
         user (:username (:identity req))
         max-players (Integer. (:max-players (:params req)))]
-    (json/encode (games/update id user max-players))))
+    (json/encode (games/update-max-players id user max-players))))
 
 (defn current-turn [req]
   "returns the current turn with options"

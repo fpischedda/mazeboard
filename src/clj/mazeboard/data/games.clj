@@ -52,12 +52,14 @@
       {:res :ok}
       {:errors [{:code :cannot-close-game :text "cannot close game"}]})))
 
-(defn update [game-id user max-players]
+(defn update-max-players [game-id user max-players]
+  "updates the maximum number of players remving extra players if needed"
   (let [res (mc/update database "games"
                        {:_id game-id
                         :status :created
                         :created-by user}
-                       {$set {:max-players max-players}})]
+                       {$set {:max-players max-players}}
+                       {$push {:players {$slice max-players}}})]
     (if (updated-existing? res)
       {:res :ok}
       {:errors [{:code :cannot-update-game :text "cannot update game"}]})))
