@@ -5,13 +5,20 @@
             [mazeboard.tile :as tile]
             [mazeboard.dice :as dice]))
 
+(defn make-players [names width height]
+  "creates players data based on names and board size"
+  (let [corners [[0 0]
+                 [0 (- width 1)]
+                 [(- height 1) (- width 1)]
+                 [(- height 1) 0]]]
+    (map-indexed #(player/make-player %2 (get corners %1)) names)))
+
 (defn make-fake-players [width height]
   "creates a couple of fake players"
-  [(player/make-player "fra" 0 0)
-   (player/make-player "arf" 0 (- width 1))])
+  (make-players ["fra" "afr"] width height))
 
 (defn init-game
-  "creates a game as an hash map"
+  "creates a game as an hash map, if a tile function is not provided use tile/random-time"
   ([players width height dice-type]
    (init-game players width height dice-type tile/random-tile))
 

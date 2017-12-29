@@ -30,4 +30,13 @@
        (fact "Check if a provided position is a winning one"
              (game/is-winning-position? the-game {:row 0 :col 0}) => false)
        (fact "The player in the ending position is the winner"
-             (game/winner the-game) => nil))
+             (game/winner the-game) => nil)
+       (fact "Assign positions for two players"
+             (game/make-players ["one" "two"] 4 4) => [
+                                                       {:name "one"
+                                                        :position {:row 0
+                                                                   :col 0}}
+                                                       {:name "two"
+                                                        :position {:row 0
+                                                                   :col 3}}
+                                                       ]))
