@@ -49,7 +49,7 @@
   {:state state})
 
 (defmethod control :create-game [event args state]
-  (let [[max-players] args]
+  (let [[max-players board-size] args]
     {:state state
      :http {:url config/game-new-url
             :method :post
@@ -57,7 +57,8 @@
             :error-fn :game-created-error
             :params {:headers (auth-header (:token state))
                      :with-credentials? false
-                     :json-params {:max-players max-players}}}}))
+                     :json-params {:max-players max-players
+                                   :board-size board-size}}}}))
 
 (defmethod control :game-created-successful [event args state]
   (load-games-effect (:token state)))

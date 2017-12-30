@@ -5,10 +5,11 @@
             [mazeboard.data.utils :refer [paged-filter gen-id]]
             [mazeboard.data.connection :refer [database]]))
 
-(defn create [user-id max-players]
+(defn create [user-id max-players board-size]
   (mc/insert-and-return database "games" {:_id (gen-id)
                                           :created-by user-id
                                           :max-players max-players
+                                          :board-size board-size
                                           :players [user-id]
                                           :free-player-slots (- max-players 1)
                                           :status :created}))

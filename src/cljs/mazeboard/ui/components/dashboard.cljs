@@ -43,23 +43,28 @@
 (rum/defc game-cancel-edit [game_id]
   [:button {:on-click #(toggle-game-editing game_id)} "Cancel"])
 
-(defn create-game [r max-players]
+(defn create-game [r max-players board-size]
   (citrus/dispatch! r
                     :dashboard
                     :create-game
-                    max-players))
+                    max-players
+                    board-size))
 
 (rum/defc game-new-button [r]
   [:button {:on-click (fn[e]
                         (create-game r
                                      (dom/value
-                                      (dom/q "#max-players"))))}
+                                      (dom/q "#max-players"))
+                                     (dom/value
+                                      (dom/q "#board-size"))))}
    "Create game"])
 
 (rum/defc game-form-new [r]
   [:ul.new-game-form "Create new game"
    [:li (label-input "Max players"
-                    {:type "text" :name "max-players" :id "max-players"})]
+                     {:type "text" :name "max-players" :id "max-players"})]
+   [:li (label-input "Board size"
+                    {:type "text" :name "board-size" :id "board-size"})]
    [:li (game-new-button r)]])
 
 (defn single-or-list [value sep]

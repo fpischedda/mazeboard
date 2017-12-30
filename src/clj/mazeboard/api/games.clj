@@ -11,8 +11,10 @@
 
 (defn create [req]
   (let [user (:username (:identity req))
-        max-players (Integer. (:max-players (:params req)))]
-    (json/encode (games/create user max-players))))
+        params (:params req)
+        max-players (Integer. (:max-players params))
+        board-size (Integer. (:board-size params))]
+    (json/encode (games/create user max-players board-size))))
 
 (defn details [req]
   (let [id (game-id req)]
@@ -31,9 +33,10 @@
 (defn start [req]
   (let [user (:username (:identity req))
         id (game-id req)
-        game (games/details id)]
+        game (games/details id)
+        size (:board-size game)]
     (when game
-      (let [res (games/start id user (game-logic/init-game (:players game) 5 5))]
+      (let [res (games/start id user (game-logic/init-game (:players game) size size))]
         (if (= (:res res) :ok)
           (json/encode (games/current-turn id))
           (json/encode res))))))
