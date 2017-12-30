@@ -36,12 +36,16 @@
       {:res :ok}
       {:errors [{:code :unable-to-leave :text "unable to leave"}]})))
 
-(defn start [game-id board]
-  (mc/update database "games"
-             {:_id game-id
-              :free-player-slots 0
-              :status :created}
-             {$set {:status :running :board-history [board]}}))
+(defn start [game-id user board]
+  "starts the specified game setting the first board status"
+  (let [res (mc/update database "games"
+                       {:_id game-id
+                        :created-by user
+                        :status :started}
+                       {$set {:status :running :turns [board]}})]
+    (if (updated-existing? res)
+      {:res :ok}
+      {:errors [{:code :cannot-start-game :text "cannot start game"}]})))
 
 (defn close [game-id user]
   (let [res (mc/update database "games"
@@ -67,6 +71,6 @@
 (defn current-turn [game-id]
   (let [game (mc/find-one-as-map database "games"
                                  {:_id game-id :status :started}
-                                 {:turns {"$slice" -1}})]
+                                 {:turns {$slice -1}})]
     (when-not (nil? game)
       (get-in game [:turns 0]))))

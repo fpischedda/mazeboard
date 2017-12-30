@@ -28,6 +28,16 @@
         id (game-id req)]
     (json/encode (games/leave id user))))
 
+(defn start [req]
+  (let [user (:username (:identity req))
+        id (game-id req)
+        game (games/details id)]
+    (when game
+      (let [res (games/start id user (game-logic/init-game (:players game) 5 5))]
+        (if (= (:res res) :ok)
+          (json/encode (games/current-turn id))
+          (json/encode res))))))
+
 (defn user-games [req]
   (let [user (:username (:identity req))]
     (json/encode (games/by-user user 0 10))))

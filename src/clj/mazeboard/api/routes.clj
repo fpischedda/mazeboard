@@ -27,5 +27,6 @@
                              (POST "/turn" [] games/apply-turn)
                              (POST "/join" [] games/join)
                              (POST "/leave" [] games/leave)
+                             (POST "/start" [] games/start)
                              (DELETE "/" [] games/abandon-game)))))
 
