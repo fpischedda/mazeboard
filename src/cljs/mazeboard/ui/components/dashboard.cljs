@@ -16,6 +16,15 @@
     (dom/toggle-class! show-elem "hidden")
     (dom/toggle-class! edit-elem "hidden")))
 
+(rum/defc game-start [r game-id]
+  [:button {:on-click (fn [e]
+                        (toggle-game-editing game-id)
+                        (citrus/dispatch! r
+                                          :dashboard
+                                          :start-game
+                                          game-id))}
+   "Start"])
+
 (rum/defc game-delete [r game-id]
   [:button {:on-click (fn [e]
                           (toggle-game-editing game-id)
@@ -73,19 +82,20 @@
     (join sep value)))
 
 (rum/defc game-item [r item]
-  (let [{:keys [_id status created-by max-players free-player-slots players]} item]
+  (let [{:keys [_id status created-by board-size max-players free-player-slots players]} item]
     [:tr.item {:on-click (fn [e] (toggle-game-editing _id)) :id (str "item-show-" _id) :key _id}
-     [:td status] [:td created-by] [:td max-players] [:td free-player-slots] [:td (single-or-list players " ")] [:td ""]]))
+     [:td status] [:td created-by] [:td board-size] [:td max-players] [:td free-player-slots] [:td (single-or-list players " ")] [:td ""]]))
 
 (rum/defc game-edit-item [r item]
-  (let [{:keys [_id created-by status max-players free-player-slots players]} item]
+  (let [{:keys [_id status created-by board-size max-players free-player-slots players]} item]
     [:tr.item-edit.hidden {:id (str "item-edit-" _id) :key _id}
      [:td status]
      [:td created-by]
+     [:td board-size]
      [:td (input "text" (str "max-players-"  _id) max-players)]
      [:td free-player-slots]
      [:td (single-or-list players " ")]
-     [:td (game-delete r _id) (game-update r _id) (game-cancel-edit _id)]]))
+     [:td (game-start r _id) (game-delete r _id) (game-update r _id) (game-cancel-edit _id)]]))
 
 (rum/defc refresh-button [r]
   [:button.refresh-button {:on-click (fn [e] (citrus/dispatch! r
@@ -104,7 +114,7 @@
    [:table.game-list
     [:thead
      [:tr
-      [:td "Status"] [:td "Created by"] [:td "Max players"] [:td "Slots left"] [:td "Players"] [:td ""]]]
+      [:td "Status"] [:td "Created by"] [:td "Board size"] [:td "Max players"] [:td "Slots left"] [:td "Players"] [:td ""]]]
     [:tbody
      (map #(game-lines r %1) games)]]
    [:div.new-game (game-form-new r)]])

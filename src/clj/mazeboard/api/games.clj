@@ -36,7 +36,7 @@
         game (games/details id)
         size (:board-size game)]
     (when game
-      (let [res (games/start id user (game-logic/init-game (:players game) size size))]
+      (let [res (games/start id user (game-logic/init-game (:players game) size size :coin))]
         (if (= (:res res) :ok)
           (json/encode (games/current-turn id))
           (json/encode res))))))

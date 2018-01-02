@@ -8,3 +8,5 @@
 (def game-new-url (str api-url "games/"))
 (defn game-detail-url [game-id]
   (str game-list-url game-id "/"))
+(defn game-start-url [game-id]
+  (str (game-detail-url game-id) "start"))

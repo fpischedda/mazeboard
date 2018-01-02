@@ -42,7 +42,7 @@
   (let [res (mc/update database "games"
                        {:_id game-id
                         :created-by user
-                        :status :started}
+                        :status :created}
                        {$set {:status :running :turns [board]}})]
     (if (updated-existing? res)
       {:res :ok}
@@ -71,7 +71,7 @@
 
 (defn current-turn [game-id]
   (let [game (mc/find-one-as-map database "games"
-                                 {:_id game-id :status :started}
+                                 {:_id game-id :status :running}
                                  {:turns {$slice -1}})]
     (when-not (nil? game)
       (get-in game [:turns 0]))))
