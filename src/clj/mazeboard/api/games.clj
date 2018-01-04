@@ -3,6 +3,7 @@
    [cheshire.core :as json]
    [mazeboard.api.utils :refer [success]]
    [mazeboard.data.games :as games]
+   [mazeboard.dice :as dice]
    [mazeboard.game :as game-logic]))
 
 (defn game-id [req]
@@ -14,7 +15,7 @@
         params (:params req)
         max-players (Integer. (:max-players params))
         board-size (Integer. (:board-size params))]
-    (json/encode (games/create user max-players board-size))))
+    (json/encode (games/create user max-players board-size :coin))))
 
 (defn details [req]
   (let [id (game-id req)]
@@ -34,9 +35,12 @@
   (let [user (:username (:identity req))
         id (game-id req)
         game (games/details id)
-        size (:board-size game)]
+        size (:board-size game)
+        dice-type (:dice-type game)
+        board (game-logic/init-game (:players game) size size dice-type)
+        move (dice/roll-dice (:dice board))]
     (when game
-      (let [res (games/start id user (game-logic/init-game (:players game) size size :coin))]
+      (let [res (games/start id user board move)]
         (if (= (:res res) :ok)
           (json/encode (games/current-turn id))
           (json/encode res))))))

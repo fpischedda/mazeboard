@@ -5,11 +5,12 @@
             [mazeboard.data.utils :refer [paged-filter gen-id]]
             [mazeboard.data.connection :refer [database]]))
 
-(defn create [user-id max-players board-size]
+(defn create [user-id max-players board-size dice-type]
   (mc/insert-and-return database "games" {:_id (gen-id)
                                           :created-by user-id
                                           :max-players max-players
                                           :board-size board-size
+                                          :dice-type dice-type
                                           :players [user-id]
                                           :free-player-slots (- max-players 1)
                                           :status :created}))
@@ -37,13 +38,13 @@
       {:res :ok}
       {:errors [{:code :unable-to-leave :text "unable to leave"}]})))
 
-(defn start [game-id user board]
+(defn start [game-id user board move]
   "starts the specified game setting the first board status"
   (let [res (mc/update database "games"
                        {:_id game-id
                         :created-by user
                         :status :created}
-                       {$set {:status :running :turns [board]}})]
+                       {$set {:status :running :turns [(assoc board :move move)]}})]
     (if (updated-existing? res)
       {:res :ok}
       {:errors [{:code :cannot-start-game :text "cannot start game"}]})))
