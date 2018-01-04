@@ -2,41 +2,73 @@
   (:require
    [cheshire.core :as json]
    [mazeboard.api.utils :refer [success]]
-   [mazeboard.data.games :as games]))
+   [mazeboard.data.games :as games]
+   [mazeboard.dice :as dice]
+   [mazeboard.game :as game-logic]))
+
+(defn game-id [req]
+  "returns the game id taking it from the request parameters"
+  (:id (:route-params req)))
 
 (defn create [req]
   (let [user (:username (:identity req))
-        max-players (Integer. (:max-players (:params req)))]
-    (json/encode (games/create user max-players))))
+        params (:params req)
+        max-players (Integer. (:max-players params))
+        board-size (Integer. (:board-size params))]
+    (json/encode (games/create user max-players board-size :coin))))
 
 (defn details [req]
-  (let [id (:id (:route-params req))]
+  (let [id (game-id req)]
     (json/encode (games/details id))))
 
 (defn join [req]
   (let [user (:username (:identity req))
-        id (:id (:route-params req))]
+        id (game-id req)]
     (json/encode (games/join id user))))
 
 (defn leave [req]
   (let [user (:username (:identity req))
-        id (:id (:route-params req))]
+        id (game-id req)]
     (json/encode (games/leave id user))))
+
+(defn start [req]
+  (let [user (:username (:identity req))
+        id (game-id req)
+        game (games/details id)
+        size (:board-size game)
+        dice-type (:dice-type game)
+        board (game-logic/init-game (:players game) size size dice-type)
+        move (dice/roll-dice (:dice board))]
+    (when game
+      (let [res (games/start id user board move)]
+        (if (= (:res res) :ok)
+          (json/encode (games/current-turn id))
+          (json/encode res))))))
 
 (defn user-games [req]
   (let [user (:username (:identity req))]
     (json/encode (games/by-user user 0 10))))
 
-(defn update [req]
-  (let [id (:id (:route-params req))
+(defn update-max-players [req]
+  (let [id (game-id req)
         user (:username (:identity req))
         max-players (Integer. (:max-players (:params req)))]
-    (json/encode (games/update id user max-players))))
+    (json/encode (games/update-max-players id user max-players))))
 
-(defn make-move [req]
-  (success []))
+(defn current-turn [req]
+  "returns the current turn with options"
+  (json/encode (games/current-turn (game-id req))))
+
+(defn apply-turn [req]
+  (let [id (game-id req)
+        user (:username (:identity req))
+        move (:move (:params req))
+        turn (games/current-turn id)]
+    (if-let [errors (game-logic/validate-move-format turn move)]
+      (json/encode errors)
+      (json/encode (game-logic/handle-turn turn move user)))))
 
 (defn abandon-game [req]
-  (let [id (:id (:route-params req))
+  (let [id (game-id req)
         user (:username (:identity req))]
     (json/encode (games/close id user))))

@@ -14,11 +14,11 @@
 
 (facts "Game related functions"
        (fact "Use calculate-next-position to change the position"
-             (game/calculate-next-position position [:move :north]) => {:row 0 :col 1}
-             (game/calculate-next-position position [:move :east]) => {:row 1 :col 2}
-             (game/calculate-next-position position [:move :south]) => {:row 2 :col 1}
-             (game/calculate-next-position position [:move :west]) => {:row 1 :col 0})
-       (fact "Use next-player to get the next active player"
+             (game/calculate-next-position position :north) => {:row 0 :col 1}
+             (game/calculate-next-position position :east) => {:row 1 :col 2}
+             (game/calculate-next-position position :south) => {:row 2 :col 1}
+             (game/calculate-next-position position :west) => {:row 1 :col 0})
+       (fact "Use next-player to get the next active player index"
              (game/next-player the-game) => 1)
        (fact "Mapping a direction to its opposite"
              (:north game/swap-dir) => :south
@@ -26,8 +26,17 @@
              (:south game/swap-dir) => :north
              (:west game/swap-dir) => :east)
        (fact "Testing tile-at-position"
-             (game/tile-at-position {:row 0 :col 0} the-game) => fake-tile)
+             (game/tile-at-position {:row 0 :col 0} (:board the-game)) => fake-tile)
        (fact "Check if a provided position is a winning one"
              (game/is-winning-position? the-game {:row 0 :col 0}) => false)
        (fact "The player in the ending position is the winner"
-             (game/winner the-game) => nil))
+             (game/winner the-game) => nil)
+       (fact "Assign positions for two players"
+             (game/make-players ["one" "two"] 4 4) => [
+                                                       {:name "one"
+                                                        :position {:row 0
+                                                                   :col 0}}
+                                                       {:name "two"
+                                                        :position {:row 0
+                                                                   :col 3}}
+                                                       ]))
