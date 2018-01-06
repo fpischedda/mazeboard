@@ -4,19 +4,24 @@
    [rum.core :as rum]
    [mazeboard.ui.utils :refer [tile-wall-classes]]))
 
-(rum/defc tile [tile player]
+(defn players-at-pos [players row-index col-index]
+  "returns all players at the specified position"
+  (filter players #(and (= (:row %1) row-index) (= (:col %1) col-index))))
+
+(rum/defc tile [row-index col-index tile players]
   [:div.tile {:class (tile-wall-classes tile)}
-   (when (not (nil? player)) (:name player))])
+   (map (players-at-pos players row-index col-index) #(:name %1))])
 
-(rum/defc board-row [row]
+(rum/defc board-row [row-index row players]
   [:div.board-row
-   (doall (for [tile row] (tile tile nil)))])
+   (map-indexed row #(tile row-index %1 %2 players))])
 
-(rum/defc board [board]
+(rum/defc board [{:keys [board players end-position]}]
   [:div.board
-   (doall (for [row (:tiles board)] (board-row row)))])
+   (map-indexed (:tiles board) #(board-row %1 %2))])
 
-(rum/defc game [game]
+(rum/defc game  rum/reactive [r]
+  (let [{game :game} (rum/react (citrus/subscrition r [:game]))])
   [:div
    [:h1 "Mazeboard game client"]
-   [board (:board game)]])
+   (board game)])

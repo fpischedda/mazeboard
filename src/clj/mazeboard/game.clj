@@ -19,11 +19,11 @@
 
 (defn init-game
   "creates a game as an hash map, if a tile function is not provided use tile/random-time"
-  ([players width height dice-type]
-   (init-game players width height dice-type tile/random-tile))
+  ([player-names width height dice-type]
+   (init-game player-names width height dice-type tile/random-tile))
 
-  ([players width height dice-type tile-fn]
-   {:players players
+  ([player-names width height dice-type tile-fn]
+   {:players (make-players player-names width height)
     :current-player 0
     :dice (dice/from-dice-type dice-type)
     :end-position {:row (int (/ height 2))
