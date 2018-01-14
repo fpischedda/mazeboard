@@ -12,16 +12,16 @@
   [:div.tile {:class (tile-wall-classes tile)}
    (map (players-at-pos players row-index col-index) #(:name %1))])
 
-(rum/defc board-row [row-index row players]
+(rum/defc row [row-index row players]
   [:div.board-row
    (map-indexed row #(tile row-index %1 %2 players))])
 
 (rum/defc board [{:keys [board players end-position]}]
   [:div.board
-   (map-indexed (:tiles board) #(board-row %1 %2))])
+   (map-indexed (:tiles board) #(row %1 %2))])
 
-(rum/defc game  rum/reactive [r]
-  (let [{game :game} (rum/react (citrus/subscrition r [:game]))])
+(rum/defc game < rum/reactive [r]
+  (let [{game :game} (rum/react (citrus/subscription r [:game]))])
   [:div
    [:h1 "Mazeboard game client"]
    (board game)])

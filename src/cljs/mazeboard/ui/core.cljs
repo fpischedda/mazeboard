@@ -11,6 +11,7 @@
             [mazeboard.ui.controllers.dashboard :as dashboard]
             [mazeboard.ui.controllers.login :as login]
             [mazeboard.ui.controllers.router :as router-ctrl]
+            [mazeboard.ui.controllers.game :as game-ctrl]
             [mazeboard.ui.handlers.local-storage :refer [local-storage]]
             [mazeboard.ui.handlers.navigation :refer [goto]]
             [mazeboard.ui.handlers.session :refer [set-token]]
@@ -30,6 +31,7 @@
   (citrus/reconciler {:state (atom {})
                       :controllers {:dashboard dashboard/control
                                     :login login/control
+                                    :game game-ctrl/control
                                     :router router-ctrl/control}
                       :effect-handlers {:http http
                                         :goto goto
