@@ -10,3 +10,7 @@
   (str game-list-url game-id "/"))
 (defn game-start-url [game-id]
   (str (game-detail-url game-id) "start"))
+(defn game-current-turn-url [game-id]
+  (str (game-detail-url game-id) "current-turn"))
+(defn game-make-move-url [game-id]
+  (str (game-detail-url game-id) "make-move"))

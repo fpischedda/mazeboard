@@ -23,7 +23,7 @@
                     (context "/:id" [id]
                              (GET "/" [] games/details)
                              (PATCH "/" [] games/update-max-players)
-                             (GET "/turn" [] games/current-turn)
+                             (GET "/current-turn" [] games/current-turn)
                              (POST "/turn" [] games/apply-turn)
                              (POST "/join" [] games/join)
                              (POST "/leave" [] games/leave)

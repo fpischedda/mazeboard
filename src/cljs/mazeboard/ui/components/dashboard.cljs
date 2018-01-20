@@ -81,9 +81,14 @@
     value
     (join sep value)))
 
+(defn play-game [game-id]
+  (navigate! (str "/game/" game-id)))
+
 (rum/defc game-item [r item]
   (let [{:keys [_id status created-by board-size max-players free-player-slots players]} item]
-    [:tr.item {:on-click (fn [e] (toggle-game-editing _id)) :id (str "item-show-" _id) :key _id}
+    [:tr.item {:on-click (if (= "running" status)
+                           (fn [e] (play-game _id))
+                           (fn [e] (toggle-game-editing _id))) :id (str "item-show-" _id) :key _id}
      [:td status] [:td created-by] [:td board-size] [:td max-players] [:td free-player-slots] [:td (single-or-list players " ")] [:td ""]]))
 
 (rum/defc game-edit-item [r item]

@@ -4,19 +4,36 @@
    [rum.core :as rum]
    [mazeboard.ui.utils :refer [tile-wall-classes]]))
 
-(rum/defc tile [tile player]
-  [:div.tile {:class (tile-wall-classes tile)}
-   (when (not (nil? player)) (:name player))])
+(defn players-at-pos [players row-index col-index]
+  "returns all players at the specified position"
+  (filter #(and (= (:row %1) row-index) (= (:col %1) col-index)) players))
 
-(rum/defc board-row [row]
-  [:div.board-row
-   (doall (for [tile row] (tile tile nil)))])
+(rum/defc tile [row-index col-index tile players]
+  [:div.tile {:class (tile-wall-classes tile)
+              :key (str "tile-" row-index "-" col-index)}
+   (map #(:name %1) (players-at-pos players row-index col-index))])
 
-(rum/defc board [board]
+(rum/defc row [row-index row players]
+  [:div.board-row {:key (str "row-" row-index)}
+   (map-indexed #(tile row-index %1 %2 players) row)])
+
+(rum/defc board [{:keys [board players end-position]}]
   [:div.board
-   (doall (for [row (:tiles board)] (board-row row)))])
+   (map-indexed #(row %1 %2) (:tiles board))])
 
-(rum/defc game [game]
+(defn load-game [r game-id]
+  (citrus/dispatch! r
+                    :game
+                    :load-game
+                    game-id))
+
+(rum/defc game < rum/reactive [r params]
   [:div
    [:h1 "Mazeboard game client"]
-   [board (:board game)]])
+   [:a {:href "/"} "<-"]
+   (let [{game :game} (rum/react (citrus/subscription r [:game]))]
+     (if (nil? game)
+       (do
+         (load-game r (:id params))
+         "Loading game...")
+       (board game)))])

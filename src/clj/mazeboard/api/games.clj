@@ -57,7 +57,7 @@
 
 (defn current-turn [req]
   "returns the current turn with options"
-  (json/encode (games/current-turn (game-id req))))
+  (json/encode (games/current-turn (get-in req [:params :id]))))
 
 (defn apply-turn [req]
   (let [id (game-id req)
