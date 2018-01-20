@@ -30,7 +30,7 @@
     {:state (assoc state :game body)}))
 
 (defmethod control :game-turn-loaded-error [event args state]
-  {:state {:error "Network error, please try again in a minute"}})
+  {:state (assoc state :error "Network error, please try again in a minute")})
 
 (defmethod control :make-move [event args state]
   (let [[move parameters] args]

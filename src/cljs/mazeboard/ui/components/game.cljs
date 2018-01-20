@@ -6,19 +6,20 @@
 
 (defn players-at-pos [players row-index col-index]
   "returns all players at the specified position"
-  (filter players #(and (= (:row %1) row-index) (= (:col %1) col-index))))
+  (filter #(and (= (:row %1) row-index) (= (:col %1) col-index)) players))
 
 (rum/defc tile [row-index col-index tile players]
-  [:div.tile {:class (tile-wall-classes tile)}
-   (map (players-at-pos players row-index col-index) #(:name %1))])
+  [:div.tile {:class (tile-wall-classes tile)
+              :key (str "tile-" row-index "-" col-index)}
+   (map #(:name %1) (players-at-pos players row-index col-index))])
 
 (rum/defc row [row-index row players]
-  [:div.board-row
-   (map-indexed row #(tile row-index %1 %2 players))])
+  [:div.board-row {:key (str "row-" row-index)}
+   (map-indexed #(tile row-index %1 %2 players) row)])
 
 (rum/defc board [{:keys [board players end-position]}]
   [:div.board
-   (map-indexed (:tiles board) #(row %1 %2))])
+   (map-indexed #(row %1 %2) (:tiles board))])
 
 (defn load-game [r game-id]
   (citrus/dispatch! r
@@ -29,6 +30,7 @@
 (rum/defc game < rum/reactive [r params]
   [:div
    [:h1 "Mazeboard game client"]
+   [:a {:href "/"} "<-"]
    (let [{game :game} (rum/react (citrus/subscription r [:game]))]
      (if (nil? game)
        (do

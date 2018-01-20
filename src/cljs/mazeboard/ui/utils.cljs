@@ -22,20 +22,19 @@
   (rum/mount (message-label text)
              (js/document.getElementById element-id)))
 
-(def wall-names {0 :north 1 :east 2 :south 3 :west})
+(def wall-names {0 "north" 1 "east" 2 "south" 3 "west"})
 
 (defn solid-wall-names [tile]
   (filter #(not (nil? %))
           (map-indexed (fn [idx wall]
-                         (if (= wall :solid) (wall-names idx) nil))
+                         (if (= wall "solid") (wall-names idx) nil))
                        tile)))
 
 (defn keyword-to-class [wall]
   (str "solid-" wall))
 
 (defn tile-wall-classes [tile]
-  (string/join " " (map #(-> % name
-                             keyword-to-class)
+  (string/join " " (map #(keyword-to-class %)
                         (solid-wall-names tile))))
 
 (defn str->obj [text]
