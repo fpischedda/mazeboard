@@ -26,9 +26,8 @@
   (load-turn-effect (:token state) game-id))
 
 (defmethod control :game-turn-loaded [event [response] state]
-  (let [body (:body response)
-        game (:game body)]
-    {:state (assoc state :game game)}))
+  (let [body (:body response)]
+    {:state (assoc state :game body)}))
 
 (defmethod control :game-turn-loaded-error [event args state]
   {:state {:error "Network error, please try again in a minute"}})
