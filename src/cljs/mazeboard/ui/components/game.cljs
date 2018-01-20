@@ -20,8 +20,18 @@
   [:div.board
    (map-indexed (:tiles board) #(row %1 %2))])
 
-(rum/defc game < rum/reactive [r]
-  (let [{game :game} (rum/react (citrus/subscription r [:game]))])
+(defn load-game [r game-id]
+  (citrus/dispatch! r
+                    :game
+                    :load-game
+                    game-id))
+
+(rum/defc game < rum/reactive [r params]
   [:div
    [:h1 "Mazeboard game client"]
-   (board game)])
+   (let [{game :game} (rum/react (citrus/subscription r [:game]))]
+     (if (nil? game)
+       (do
+         (load-game r (:id params))
+         "Loading game...")
+       (board game)))])

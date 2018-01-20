@@ -1,6 +1,7 @@
 (ns mazeboard.ui.controllers.game
   (:require
    [mazeboard.ui.config :as config]
+   [mazeboard.ui.utils :refer [auth-header]]
    [mazeboard.ui.utils :refer [str->obj obj->str]]))
 
 (defn load-turn-effect [token game-id]
@@ -21,8 +22,16 @@
 (defmethod control :set-token [event [token] state]
   {:state (assoc state :token token)})
 
-(defmethod control :play-game-by-id [event [game-id] state]
+(defmethod control :load-game [event [game-id] state]
   (load-turn-effect (:token state) game-id))
+
+(defmethod control :game-turn-loaded [event [response] state]
+  (let [body (:body response)
+        game (:game body)]
+    {:state (assoc state :game game)}))
+
+(defmethod control :game-turn-loaded-error [event args state]
+  {:state {:error "Network error, please try again in a minute"}})
 
 (defmethod control :make-move [event args state]
   (let [[move parameters] args]
@@ -48,10 +57,3 @@
        :set-token token
        :goto {:url "/"}}
       {:state {:error (get-in [0 :text] errors)}})))
-
-(defmethod control :login-error [event args state]
-  {:state {:error "Network error, please try again in a minute"}})
-
-(defmethod control :logout [event args state]
-  {:state {}
-   :goto {:url "/login"}})

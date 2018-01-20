@@ -43,3 +43,6 @@
 
 (defn obj->str [obj]
   (.stringify js/JSON (clj->js obj)))
+
+(defn auth-header [token]
+  {"Authorization" (str "Token " token)})

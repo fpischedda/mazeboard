@@ -16,7 +16,7 @@
      [:p "Mazeboard UI"]
      (case route
        :dashboard (dashboard/dashboard r)
-       :game (game/game r)
+       :game (game/game r params)
        :login (login/login r)
        :logout (login/logout r)
        (login/login r))]))

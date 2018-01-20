@@ -1,10 +1,8 @@
 (ns mazeboard.ui.controllers.dashboard
   (:require
    [mazeboard.ui.config :as config]
+   [mazeboard.ui.utils :refer [auth-header]]
    [clojure.string :refer [split]]))
-
-(defn auth-header [token]
-  {"Authorization" (str "Token " token)})
 
 (defn load-games-effect [token]
   {:http
