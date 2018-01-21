@@ -6,12 +6,12 @@
 
 (defn players-at-pos [players row-index col-index]
   "returns all players at the specified position"
-  (filter #(and (= (:row %1) row-index) (= (:col %1) col-index)) players))
+  (filter #(= {:row row-index :col col-index} (:position %)) players))
 
 (rum/defc tile [row-index col-index tile players]
   [:div.tile {:class (tile-wall-classes tile)
               :key (str "tile-" row-index "-" col-index)}
-   (map #(:name %1) (players-at-pos players row-index col-index))])
+   (map #(:name %) (players-at-pos players row-index col-index))])
 
 (rum/defc row [row-index row players]
   [:div.board-row {:key (str "row-" row-index)}
@@ -19,7 +19,7 @@
 
 (rum/defc board [{:keys [board players end-position]}]
   [:div.board
-   (map-indexed #(row %1 %2) (:tiles board))])
+   (map-indexed #(row %1 %2 players) (:tiles board))])
 
 (defn load-game [r game-id]
   (citrus/dispatch! r
