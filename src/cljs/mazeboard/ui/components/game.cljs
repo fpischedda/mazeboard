@@ -2,7 +2,8 @@
   (:require
    [citrus.core :as citrus]
    [rum.core :as rum]
-   [mazeboard.ui.utils :refer [tile-wall-classes]]))
+   [mazeboard.ui.utils :refer [tile-wall-classes]]
+   [mazeboard.ui.effects.game :refer [load-game]]))
 
 (defn players-at-pos [players row-index col-index]
   "returns all players at the specified position"
@@ -17,15 +18,19 @@
   [:div.board-row {:key (str "row-" row-index)}
    (map-indexed #(tile row-index %1 %2 players) row)])
 
-(rum/defc board [{:keys [board players end-position]}]
-  [:div.board
-   (map-indexed #(row %1 %2 players) (:tiles board))])
+(rum/defc current-turn [current-player move players]
+  (let [player-name (:name (get players current-player))]
+    [:div.turn "current turn"
+     [:div.current-player (str player-name "'s turn")]
+     [:div.move (str "player " player-name " can " (get move 0))]]))
 
-(defn load-game [r game-id]
-  (citrus/dispatch! r
-                    :game
-                    :load-game
-                    game-id))
+
+(rum/defc board [{:keys [board players end-position current-player move]}]
+  [:div.game
+   [:div.board
+    (map-indexed #(row %1 %2 players) (:tiles board))]
+   [:div {:style {:clear :both}}]
+   (current-turn current-player move players)])
 
 (rum/defc game < rum/reactive [r params]
   [:div
