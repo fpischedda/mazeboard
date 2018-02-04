@@ -7,6 +7,7 @@
    [cljs-http.client :as http]
    [cljs.core.async :refer [<!]]
    [mazeboard.ui.dom :as dom]
+   [mazeboard.ui.effects.dashboard :refer [create-game start-game delete-game update-game load-games]]
    [mazeboard.ui.utils :refer [error-message show-message input label-input]]
    [mazeboard.ui.config :as config]))
 
@@ -19,27 +20,14 @@
 (rum/defc game-start [r game-id]
   [:button {:on-click (fn [e]
                         (toggle-game-editing game-id)
-                        (citrus/dispatch! r
-                                          :dashboard
-                                          :start-game
-                                          game-id))}
+                        (start-game r game-id))}
    "Start"])
 
 (rum/defc game-delete [r game-id]
   [:button {:on-click (fn [e]
                           (toggle-game-editing game-id)
-                          (citrus/dispatch! r
-                                            :dashboard
-                                            :delete-game
-                                            game-id))}
+                          (delete-game r game-id))}
    "Delete"])
-
-(defn update-game [r game-id max-players]
-  (citrus/dispatch! r
-                    :dashboard
-                    :update-game
-                    game-id
-                    max-players))
 
 (rum/defc game-update [r game-id]
   [:button {:on-click (fn [e]
@@ -51,13 +39,6 @@
 
 (rum/defc game-cancel-edit [game_id]
   [:button {:on-click #(toggle-game-editing game_id)} "Cancel"])
-
-(defn create-game [r max-players board-size]
-  (citrus/dispatch! r
-                    :dashboard
-                    :create-game
-                    max-players
-                    board-size))
 
 (rum/defc game-new-button [r]
   [:button {:on-click (fn[e]
@@ -103,9 +84,7 @@
      [:td (game-start r _id) (game-delete r _id) (game-update r _id) (game-cancel-edit _id)]]))
 
 (rum/defc refresh-button [r]
-  [:button.refresh-button {:on-click (fn [e] (citrus/dispatch! r
-                                                        :dashboard
-                                                        :load-games))}
+  [:button.refresh-button {:on-click #(load-games r)}
    "Refresh"])
 
 (defn game-lines [r game]
@@ -128,9 +107,7 @@
   (let [{:keys [token games]} (rum/react (citrus/subscription r [:dashboard]))]
     (cond
       (nil? token) (navigate! "/login")
-      (nil? games) (citrus/dispatch! r
-                                     :dashboard
-                                     :load-games))
+      (nil? games) (load-games r))
     [:div
      (game-list r games)]
     ))

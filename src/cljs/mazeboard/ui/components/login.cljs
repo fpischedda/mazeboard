@@ -5,15 +5,14 @@
    [rum.core :as rum]
    [cljs.core.async :refer [<!]]
    [mazeboard.ui.dom :as dom]
+   [mazeboard.ui.effects.login :as login-effects]
    [mazeboard.ui.utils :refer [error-message show-message label-input]]
    [mazeboard.ui.config :as config]))
 
 (rum/defc login-button [r]
-  [:button {:on-click #(citrus/dispatch! r
-                                         :login
-                                         :authenticate
-                                         (dom/elem-value "#username")
-                                         (dom/elem-value "#password"))}
+  [:button {:on-click #(login-effects/login r
+                                           (dom/elem-value "#username")
+                                           (dom/elem-value "#password"))}
    "Login"])
 
 (rum/defc login < rum/reactive [r]
@@ -29,5 +28,5 @@
      [:div#messages error]]))
 
 (rum/defc logout [r]
-  (citrus/dispatch! r :login :logout)
+  (login-effects/logout r)
   [:div "Logged out"])
