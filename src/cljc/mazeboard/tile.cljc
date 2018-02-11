@@ -8,9 +8,15 @@
   "randomize a wall; a wall can be :open or :solid"
   (if (> (rand) 0.5) :solid :open))
 
+(defn fix-solid-walls [tile]
+  "open one tile wall if all are closed"
+  (if (some #{:open} tile)
+    tile
+    (assoc tile (int (* 4.9 (rand))) :open)))
+
 (defn random-tile []
   "randomize a tile"
-  (make-tile (random-wall) (random-wall) (random-wall) (random-wall)))
+  (fix-solid-walls (make-tile (random-wall) (random-wall) (random-wall) (random-wall))))
 
 (defn rotate-tile-left [tile]
   "Rotate a tile counterclockwise"
