@@ -4,7 +4,7 @@
   (:gen-class))
 
 (defn -main
-  "Mazeboard game executable"
+  "Mazeboard server executable"
   [& args]
   (println "starting server: " (:server (:config system)))
   (mount/start))

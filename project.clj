@@ -26,19 +26,20 @@
                  [danlentz/clj-uuid "0.1.7"]
                  [cljs-http "0.1.43"]]
   :main ^:skip-aot mazeboard.core
+  :jvm-opts ["--add-modules" "java.xml.bind"]
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2.1"]
             [lein-cljsbuild "1.1.5"]
             [lein-garden "0.3.0"]
             [lein-figwheel "0.5.14"]
             [org.clojure/tools.nrepl "0.2.12"]]
-  :ring {:handler mazeboard.api/handler}
+  :ring {:handler mazeboard.api.server/app}
   :source-paths ["src/clj" "src/cljc"]
   :target-path "target/%s"
   :test-paths ["test" "test/mazeboard"]
   :profiles {:uberjar {:aot :all
                        :resource-paths ["config/prod"]}
-             :dev {:dependencies [[midje "1.9.0-alpha11"]
+             :dev {:dependencies [[midje "1.9.1"]
                                   [lein-midje "3.2.1"]
                                   [org.clojure/tools.nrepl "0.2.12"]]
                    :resource-paths ["config/dev"]}}

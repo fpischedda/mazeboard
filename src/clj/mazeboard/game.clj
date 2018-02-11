@@ -1,6 +1,5 @@
 (ns mazeboard.game
-  (:require [clojure.pprint :as pprint]
-            [mazeboard.board :as board]
+  (:require [mazeboard.board :as board]
             [mazeboard.player :as player]
             [mazeboard.tile :as tile]
             [mazeboard.dice :as dice]))
@@ -122,6 +121,3 @@
       {:errors [{:type :wrong-player}]}
       (when-not (contains? #{:move :rotate} (:type move))
         :errors [{:type :wrong-move-type}]))))
-
-(defn print-game [game]
-  (pprint/pprint game))
