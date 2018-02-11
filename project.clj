@@ -26,7 +26,6 @@
                  [danlentz/clj-uuid "0.1.7"]
                  [cljs-http "0.1.43"]]
   :main ^:skip-aot mazeboard.core
-  :jvm-opts ["--add-modules" "java.xml.bind"]
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.2.1"]
             [lein-cljsbuild "1.1.5"]
