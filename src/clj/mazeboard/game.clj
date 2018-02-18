@@ -53,7 +53,7 @@
   "returns true if the player can move to this position"
   (tile/is-open? (direction swap-dir) (tile-at-position position board)))
 
-(defn valid-move [position new-position game direction]
+(defn valid-move? [position new-position game direction]
   "returns true if the new position is valid, false otherwise"
   (let [board (:board game)]
     (and (board/is-inside? board (:row new-position) (:col new-position))
@@ -88,7 +88,7 @@
         position (player/player-position player)
         direction (:direction move)
         next-position (calculate-next-position position direction)]
-    (if (valid-move position next-position game direction)
+    (if (valid-move? position next-position game direction)
       ((set-current-player-position game next-position)
        (assoc game :current-player (next-player)))
       game)))
