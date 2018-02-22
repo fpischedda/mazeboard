@@ -1,0 +1,79 @@
+body {
+  background-color: #eee;
+  text-color: 222;
+}
+
+.hidden {
+  display: none;
+}
+
+.profile {
+  background-color: #ddd;
+  padding: 1px 5px;
+}
+
+.profile div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile div .greeting {
+  text-color: #333;
+}
+
+.profile div .logout {
+
+}
+
+div.games {
+  padding: 1px 5px;
+}
+
+div.games table {
+  border: 1px black;
+}
+
+div.games table thead {
+  background-color: #dddddd;
+}
+
+div.games table tbody {
+  background-color: #eaeaea;
+}
+
+.tile {
+  float: left;
+  width: 128px;
+  height: 128px;
+  margin: 0.2em;
+  border: solid 4px black;
+  background-color: #333300;
+  display: table;
+  background-image: url(/images/tile_1.png);
+  color: white;
+}
+
+div.board-row {
+  clear: both;
+}
+
+dib.board {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.solid-north {
+  border-top: solid 4px red;
+}
+
+.solid-east {
+  border-right: solid 4px red;
+}
+
+.solid-south {
+  border-bottom: solid 4px red;
+}
+
+.solid-west {
+  border-left: solid 4px red;
+}
