@@ -17,7 +17,7 @@
   (make-players ["fra" "afr"] width height))
 
 (defn init-game
-  "creates a game as an hash map, if a tile function is not provided use tile/random-time"
+  "creates a game as a map, if a tile function is not provided use tile/random-time"
   ([player-names width height dice-type]
    (init-game player-names width height dice-type tile/random-tile))
 
@@ -53,12 +53,11 @@
   "returns true if the player can move to this position"
   (tile/is-open? (direction swap-dir) (tile-at-position position board)))
 
-(defn valid-move? [position new-position game direction]
+(defn valid-move? [position new-position board direction]
   "returns true if the new position is valid, false otherwise"
-  (let [board (:board game)]
-    (and (board/is-inside? board (:row new-position) (:col new-position))
-         (can-move-from-here? position board direction)
-         (can-move-to-there? new-position board direction))))
+  (and (board/is-inside? board (:row new-position) (:col new-position))
+      (can-move-from-here? position board direction)
+      (can-move-to-there? new-position board direction)))
 
 (def move-functions {:north {:row dec :col identity}
                      :south {:row inc :col identity}
@@ -88,7 +87,7 @@
         position (player/player-position player)
         direction (:direction move)
         next-position (calculate-next-position position direction)]
-    (if (valid-move? position next-position game direction)
+    (if (valid-move? position next-position (:board game) direction)
       ((set-current-player-position game next-position)
        (assoc game :current-player (next-player)))
       game)))

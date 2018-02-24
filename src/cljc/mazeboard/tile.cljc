@@ -12,7 +12,7 @@
   "open one tile wall if all are closed"
   (if (some #{:open} tile)
     tile
-    (assoc tile (int (* 4.9 (rand))) :open)))
+    (assoc tile (int (* 3.9 (rand))) :open)))
 
 (defn random-tile []
   "randomize a tile"
