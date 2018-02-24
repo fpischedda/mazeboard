@@ -3,7 +3,8 @@
             [monger.operators :refer :all]
             [monger.result :refer [updated-existing?]]
             [mazeboard.data.utils :refer [paged-filter gen-id]]
-            [mazeboard.data.connection :refer [database]]))
+            [mazeboard.data.connection :refer [database]]
+            [mazeboard.game :as game-logic]))
 
 (defn create [user-id max-players board-size dice-type]
   (mc/insert-and-return database "games" {:_id (gen-id)
@@ -38,13 +39,24 @@
       {:res :ok}
       {:errors [{:code :unable-to-leave :text "unable to leave"}]})))
 
+(defn filter-invalid-moves [board [type data]]
+  (if (= :turn type)
+    [type data]
+    (let [position (game-logic/game-current-player-position board)]
+      [type (filter data #(game-logic/valid-move?
+                           position
+                           (game-logic/calculate-next-position position %)
+                           board %))])))
+
 (defn start [game-id user board move]
   "starts the specified game setting the first board status"
-  (let [res (mc/update database "games"
+  (let [filtered-move (filter-invalid-moves board move)
+        res (mc/update database "games"
                        {:_id game-id
                         :created-by user
                         :status :created}
-                       {$set {:status :running :turns [(assoc board :move move)]}})]
+                       {$set {:status :running
+                              :turns [(assoc board :move filtered-move)]}})]
     (if (updated-existing? res)
       {:res :ok}
       {:errors [{:code :cannot-start-game :text "cannot start game"}]})))
