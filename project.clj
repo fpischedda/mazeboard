@@ -12,7 +12,7 @@
                  [ring "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
                  [ring/ring-json "0.4.0"]
-                 [rum "0.10.8"]
+                 [rum "0.11.2"]
                  [org.roman01la/citrus "3.0.0"]
                  [bidi "2.1.2"]
                  [kibu/pushy "0.3.8"]
