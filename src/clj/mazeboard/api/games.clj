@@ -10,8 +10,12 @@
   "returns the game id taking it from the request parameters"
   (:id (:route-params req)))
 
+(defn get-user [req]
+  "extracts username from request"
+  (:username (:identity req)))
+
 (defn create [req]
-  (let [user (:username (:identity req))
+  (let [user (get-user req)
         params (:params req)
         max-players (Integer. (:max-players params))
         board-size (Integer. (:board-size params))]
@@ -22,17 +26,17 @@
     (json/encode (games/details id))))
 
 (defn join [req]
-  (let [user (:username (:identity req))
+  (let [user (get-user req)
         id (game-id req)]
     (json/encode (games/join id user))))
 
 (defn leave [req]
-  (let [user (:username (:identity req))
+  (let [user (get-user req)
         id (game-id req)]
     (json/encode (games/leave id user))))
 
 (defn start [req]
-  (let [user (:username (:identity req))
+  (let [user (get-user req)
         id (game-id req)
         game (games/details id)
         size (:board-size game)
@@ -46,22 +50,22 @@
           (json/encode res))))))
 
 (defn user-games [req]
-  (let [user (:username (:identity req))]
+  (let [user (get-user req)]
     (json/encode (games/by-user user 0 10))))
 
 (defn update-max-players [req]
   (let [id (game-id req)
-        user (:username (:identity req))
+        user (get-user req)
         max-players (Integer. (:max-players (:params req)))]
     (json/encode (games/update-max-players id user max-players))))
 
 (defn current-turn [req]
   "returns the current turn with options"
-  (json/encode (games/current-turn (get-in req [:params :id]))))
+  (json/encode (games/current-turn (game-id req))))
 
 (defn apply-turn [req]
   (let [id (game-id req)
-        user (:username (:identity req))
+        user (get-user req)
         move (:move (:params req))
         turn (games/current-turn id)]
     (if-let [errors (game-logic/validate-move-format turn move)]
@@ -70,5 +74,5 @@
 
 (defn abandon-game [req]
   (let [id (game-id req)
-        user (:username (:identity req))]
+        user (get-user req)]
     (json/encode (games/close id user))))

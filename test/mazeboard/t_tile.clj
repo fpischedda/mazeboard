@@ -3,6 +3,7 @@
   (:require [mazeboard.tile :as tile]))
 
 (def the-tile (tile/make-tile :solid :solid :open :open))
+(def solid-tile (tile/make-tile :solid :solid :solid :solid))
 
 (facts "Tile is an array of four elements that can be :solid or :open"
        (fact "Tiles is composed of four elements"
@@ -25,4 +26,6 @@
              (tile/rotate-tile :left the-tile) => [:solid :open :open :solid]
              (tile/rotate-tile :right the-tile) => [:open :solid :solid :open]
              )
+       (fact "Tiles should not have four closed walls"
+             (some #{:open} (tile/fix-solid-walls solid-tile)) => :open)
        )
