@@ -18,7 +18,7 @@
 
 (defn tile-at [board row col]
   "return the tile at specified coordinates"
-  (get (get (:tiles board) row) col))
+  (get-in board [:tiles row col]))
 
 (defn update-board [board row col new-tile]
   "replace the tile at row-col with the new tile"
