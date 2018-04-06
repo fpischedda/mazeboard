@@ -16,7 +16,7 @@
    "Login"])
 
 (rum/defc login < rum/reactive [r]
-  (let [{error :error profile :profile} (rum/react (citrus/subscription r [:login]))]
+  (let [{:keys [error profile]} (rum/react (citrus/subscription r [:login]))]
     [:div.login-box
      [:h2 "Mazeboard Dashboard"]
      [:div.login-form
