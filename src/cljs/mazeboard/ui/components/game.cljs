@@ -37,9 +37,9 @@
    [:h1 "Mazeboard game client"]
    [:a {:href "/"} "<-"]
    (let [{game :game} (rum/react (citrus/subscription r [:game]))
-         token (get-in (rum/react (citrus/subscription r [:login])))]
+         token (get-in (rum/react (citrus/subscription r [:login])) [:profile :token])]
      (if (nil? game)
        (do
-         (load-game r (:id token params))
+         (load-game r token (:id params))
          "Loading game...")
        (board game)))])
