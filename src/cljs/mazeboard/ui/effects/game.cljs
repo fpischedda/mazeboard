@@ -2,8 +2,9 @@
   (:require
    [citrus.core :as citrus]))
 
-(defn load-game [r game-id]
+(defn load-game [r token game-id]
   (citrus/dispatch! r
                     :game
                     :load-game
+                    token
                     game-id))
