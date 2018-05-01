@@ -2,33 +2,39 @@
   (:require
    [citrus.core :as citrus]))
 
-(defn create-game [r max-players board-size]
+(defn create-game [r token max-players board-size]
   (citrus/dispatch! r
                     :dashboard
                     :create-game
+                    token
                     max-players
                     board-size))
 
-(defn start-game [r game-id]
+(defn start-game [r token game-id]
   (citrus/dispatch! r
                     :dashboard
                     :start-game
+                    token
                     game-id))
 
-(defn delete-game [r game-id]
+(defn delete-game [r token game-id]
   (citrus/dispatch! r
                     :dashboard
                     :delete-game
+                    token
                     game-id))
 
-(defn update-game [r game-id max-players]
+(defn update-game [r token game-id max-players]
   (citrus/dispatch! r
                     :dashboard
                     :update-game
+                    token
                     game-id
                     max-players))
 
-(defn load-games [r]
+(defn load-games [r token]
+  (println "??? load-games " token)
   (citrus/dispatch! r
                     :dashboard
-                    :load-games))
+                    :load-games
+                    token))
