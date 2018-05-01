@@ -15,7 +15,8 @@
 (defonce server-instance (atom nil))
 
 (def mazeboard-defaults (assoc site-defaults :security {:anti-forgery false}))
-(def auth-backend (backends/jws {:secret (:auth-secret config)}))
+(defn gen-auth-backend [auth-secret]
+  (backends/jws {:secret auth-secret}))
 
 (def access-options {:rules rules})
 
@@ -35,19 +36,23 @@
           (assoc-in [:headers "Access-Control-Allow-Methods"] "GET,PUT,POST,PATCH,DELETE,OPTIONS")
           (assoc-in [:headers "Access-Control-Allow-Headers"] "X-Requested-With,Content-Type,Cache-Control, Authorization")))))
 
-(def app (-> (wrap-defaults #'routes mazeboard-defaults)
-             (wrap-keyword-params)
-             (wrap-json-params)
-             (wrap-default-headers)
-             (wrap-access-rules access-options)
-             (wrap-authorization auth-backend)
-             (allow-cross-origin)
-             (wrap-authentication auth-backend)))
+(defn gen-app [auth-secret]
+  (let [auth-backend (gen-auth-backend auth-secret)]
+    (-> (wrap-defaults #'routes mazeboard-defaults)
+        (wrap-keyword-params)
+        (wrap-json-params)
+        (wrap-default-headers)
+        (wrap-access-rules access-options)
+        (wrap-authorization auth-backend)
+        (allow-cross-origin)
+        (wrap-authentication auth-backend))))
+
+
 
 (defn start []
-  (let [api-server (:api-server config)]
+  (let [{:keys [api-server auth-secret]} config]
     (println "starting api server " api-server)
-    (reset! server-instance (run-server app api-server))))
+    (reset! server-instance (run-server (gen-app auth-secret) api-server))))
 
 (defn stop []
   (when-not (nil? @server-instance)
