@@ -9,8 +9,7 @@
 
 (rum/defc App < rum/reactive [r]
   (let [{route :handler params :route-params} (rum/react (citrus/subscription r [:router]))
-        {user :profile} (rum/react (citrus/subscription r [:login]))
-        {token :token} (rum/react (citrus/subscription r [:dashboard]))]
+        {user :profile} (rum/react (citrus/subscription r [:login]))]
     [:div
      (profile/bar user)
      [:p "Mazeboard UI"]

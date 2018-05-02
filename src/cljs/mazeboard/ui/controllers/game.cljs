@@ -22,8 +22,8 @@
 (defmethod control :set-token [event [token] state]
   {:state (assoc state :token token)})
 
-(defmethod control :load-game [event [game-id] state]
-  (load-turn-effect (:token state) game-id))
+(defmethod control :load-game [event [token game-id] state]
+  (load-turn-effect token game-id))
 
 (defmethod control :game-turn-loaded [event [response] state]
   (let [body (:body response)]
@@ -33,7 +33,7 @@
   {:state (assoc state :error "Network error, please try again in a minute")})
 
 (defmethod control :make-move [event args state]
-  (let [[move parameters] args]
+  (let [[token move parameters] args]
     {:state state
      :http {:url config/game-make-move-url
             :method :post

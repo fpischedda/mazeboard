@@ -22,8 +22,8 @@
 (defmethod control :set-token [event [token] state]
   {:state (assoc state :token token)})
 
-(defmethod control :load-games [event args state]
-  (load-games-effect (:token state)))
+(defmethod control :load-games [event [token] state]
+  (load-games-effect token))
 
 (defmethod control :game-list-loaded [event [response] state]
   (let [games (:body response)]
@@ -32,7 +32,7 @@
 (defmethod control :game-list-loaded-error [event args state]
   {:state state})
 
-(defmethod control :delete-game [event [game-id] state]
+(defmethod control :delete-game [event [token game-id] state]
   {:state state
    :http {:url (config/game-detail-url game-id)
           :method :delete
@@ -47,13 +47,13 @@
   {:state state})
 
 (defmethod control :create-game [event args state]
-  (let [[max-players board-size] args]
+  (let [[token max-players board-size] args]
     {:state state
      :http {:url config/game-new-url
             :method :post
             :success-fn :game-created-successful
             :error-fn :game-created-error
-            :params {:headers (auth-header (:token state))
+            :params {:headers (auth-header token)
                      :with-credentials? false
                      :json-params {:max-players max-players
                                    :board-size board-size}}}}))
@@ -65,13 +65,13 @@
   {:state state})
 
 (defmethod control :update-game [event args state]
-  (let [[game-id max-players] args]
+  (let [[token game-id max-players] args]
     {:state state
      :http {:url (config/game-detail-url game-id)
             :method :patch
             :success-fn :game-updated-successful
             :error-fn :game-updated-error
-            :params {:headers (auth-header (:token state))
+            :params {:headers (auth-header token)
                      :with-credentials? false
                      :json-params {:max-players max-players}}}}))
 
@@ -82,13 +82,13 @@
   {:state state})
 
 (defmethod control :start-game [event args state]
-  (let [[game-id] args]
+  (let [[token game-id] args]
     {:state state
      :http {:url (config/game-start-url game-id)
             :method :post
             :success-fn :game-started-successful
             :error-fn :game-started-error
-            :params {:headers (auth-header (:token state))
+            :params {:headers (auth-header token)
                      :with-credentials? false}}}))
 
 (defmethod control :game-started-successful [event args state]
