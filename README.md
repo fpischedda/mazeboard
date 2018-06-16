@@ -32,7 +32,8 @@ you need to have Docker Compose running in your system
 ## Rules
 The game is for two to four players.
 Each player must start at one of the four corners of the board.
-The boards is a grid of NxN tiles with N being a odd number greater then 5.
+The boards is a grid of NxN tiles with N being a odd number equal or greater
+then 5.
 Each tile represents a room which may have up to four open walls, or walls with
 an open door.
 Each player can either move through an open wall to one of the four nearby tiles
