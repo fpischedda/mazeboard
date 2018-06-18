@@ -31,7 +31,7 @@
 
 (defn game-current-player [game]
   "returns the current player"
-  (get (:players game) (:current-player game)))
+  (nth (:players game) (:current-player game)))
 
 (defn game-current-player-position [game]
   "returns the position of the current player"
@@ -47,7 +47,7 @@
   "returns true if the player can move from the specified position"
   (tile/is-open? direction (tile-at-position position board)))
 
-(def swap-dir {:north :south :east :west :south :north :west :east})
+(def swap-dir {:up :down :right :left :down :up :left :right})
 
 (defn can-move-to-there? [position board direction]
   "returns true if the player can move to this position"
@@ -59,10 +59,10 @@
       (can-move-from-here? position board direction)
       (can-move-to-there? new-position board direction)))
 
-(def move-functions {:north {:row dec :col identity}
-                     :south {:row inc :col identity}
-                     :east  {:row identity :col inc}
-                     :west  {:row identity :col dec}})
+(def move-functions {:up {:row dec :col identity}
+                     :down {:row inc :col identity}
+                     :right {:row identity :col inc}
+                     :left {:row identity :col dec}})
 
 (defn calculate-next-position [position direction]
   "returns the new position based on current one and the move"
