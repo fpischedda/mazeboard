@@ -33,7 +33,6 @@
                     max-players))
 
 (defn load-games [r token]
-  (println "??? load-games " token)
   (citrus/dispatch! r
                     :dashboard
                     :load-games
