@@ -40,13 +40,14 @@
       {:errors [{:code :unable-to-leave :text "unable to leave"}]})))
 
 (defn filter-invalid-moves [board [type data]]
-  (if (= :turn type)
-    [type data]
-    (let [position (game-logic/game-current-player-position board)]
-      [type (filter data #(game-logic/valid-move?
-                           position
-                           (game-logic/calculate-next-position position %)
-                           board %))])))
+  [type (if (= :turn type)
+          data
+          (let [position (game-logic/game-current-player-position board)]
+            (into [] (filter #(game-logic/valid-move?
+                               position
+                               (game-logic/calculate-next-position position %)
+                               (:board board) %)
+                             data))))])
 
 (defn start [game-id user board move]
   "starts the specified game setting the first board status"
