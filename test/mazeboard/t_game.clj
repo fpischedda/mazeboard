@@ -14,17 +14,17 @@
 
 (facts "Game related functions"
        (fact "Use calculate-next-position to change the position"
-             (game/calculate-next-position position :north) => {:row 0 :col 1}
-             (game/calculate-next-position position :east) => {:row 1 :col 2}
-             (game/calculate-next-position position :south) => {:row 2 :col 1}
-             (game/calculate-next-position position :west) => {:row 1 :col 0})
+             (game/calculate-next-position position :up) => {:row 0 :col 1}
+             (game/calculate-next-position position :right) => {:row 1 :col 2}
+             (game/calculate-next-position position :down) => {:row 2 :col 1}
+             (game/calculate-next-position position :left) => {:row 1 :col 0})
        (fact "Use next-player to get the next active player index"
              (game/next-player the-game) => 1)
        (fact "Mapping a direction to its opposite"
-             (:north game/swap-dir) => :south
-             (:east game/swap-dir) => :west
-             (:south game/swap-dir) => :north
-             (:west game/swap-dir) => :east)
+             (:up game/swap-dir) => :down
+             (:right game/swap-dir) => :left
+             (:down game/swap-dir) => :up
+             (:left game/swap-dir) => :right)
        (fact "Testing tile-at-position"
              (game/tile-at-position {:row 0 :col 0} (:board the-game)) => fake-tile)
        (fact "Check if a provided position is a winning one"
