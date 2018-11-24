@@ -28,7 +28,7 @@
                        {$addToSet {:players user-id} $inc {:free-player-slots -1}})]
     (if (updated-existing? res)
       {:res :ok}
-      {:errors [{:code :unable-to-join :text "unable to join"}]})))
+      {:errors [{:code :unable-to-join :text "unable to join!!!"}]})))
 
 (defn leave [game-id user-id]
   (let [res (mc/update database "games"

@@ -12,9 +12,7 @@
     true
     (error "Only authenticated users allowed")))
 
-(def rules [{:pattern #"^/api/v1/login$"
-             :handler any-access}
-            {:pattern #"^/api/v1/register$"
+(def rules [{:pattern #"^/api/v1/auth.*"
              :handler any-access}
             {:pattern #"^/.*"
              :handler any-access

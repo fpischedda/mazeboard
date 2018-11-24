@@ -1,6 +1,7 @@
 (ns mazeboard.api.games
   (:require
    [cheshire.core :as json]
+   [compojure.core :refer [context GET POST PATCH DELETE]]
    [mazeboard.api.utils :refer [success]]
    [mazeboard.data.games :as games]
    [mazeboard.dice :as dice]
@@ -76,3 +77,16 @@
   (let [id (game-id req)
         user (get-user req)]
     (json/encode (games/close id user))))
+
+(def routes (context "/games" []
+                     (GET "/" [] user-games)
+                     (POST "/" [] create)
+                     (context "/:id" [id]
+                              (GET "/" [] details)
+                              (PATCH "/" [] update-max-players)
+                              (GET "/current-turn" [] current-turn)
+                              (POST "/turn" [] apply-turn)
+                              (POST "/join" [] join)
+                              (POST "/leave" [] leave)
+                              (POST "/start" [] start)
+                              (DELETE "/" [] abandon-game))))

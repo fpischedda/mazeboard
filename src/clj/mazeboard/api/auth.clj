@@ -1,6 +1,7 @@
 (ns mazeboard.api.auth
   (:require
    [clj-time.core :as time]
+   [compojure.core :refer [defroutes context POST]]
    [buddy.sign.jwt :as jwt]
    [cheshire.core :as json]
    [mazeboard.config :refer [config]]
@@ -21,8 +22,9 @@
     (if user-exists
       (json/encode {:token token
                     :username username})
-      (json/encode {:errors [{:code :user-not-found
-                              :text "user not found"}]}))))
+      {:status 401
+       :body (json/encode {:errors [{:code :user-not-found
+                                     :text "user not found"}]})})))
 
 (defn register [req]
   (let [data (:params req)
@@ -38,3 +40,7 @@
                     :username username})
       (json/encode {:errors [{:code :unable-to-register
                               :text "unable to register"}]}))))
+
+(def routes (context "/auth" []
+                     (POST "/login" [] login)
+                     (POST "/register" [] register)))

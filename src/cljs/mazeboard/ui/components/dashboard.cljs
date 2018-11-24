@@ -100,7 +100,7 @@
 
 (rum/defc game-list [r token games]
   [:div.games
-   [:h3 "Your games"]
+   [:h3 "Your games!!!"]
    (refresh-button r token)
    [:table.game-list
     [:thead
