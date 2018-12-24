@@ -2,7 +2,7 @@
   (:require
    [cheshire.core :as json]
    [compojure.core :refer [context GET POST PATCH DELETE]]
-   [mazeboard.api.response :refer [json-success created]]
+   [mazeboard.api.response :refer [error json-bad-request json-success created accepted]]
    [mazeboard.data.games :as games]
    [mazeboard.dice :as dice]
    [mazeboard.game :as game-logic]))
@@ -16,7 +16,7 @@
   (:usr (:identity req)))
 
 (defn game-url [game]
-  (str (:base-url config) "games/" (:_id game)))
+  (str "/games/" (:_id game)))
 
 (defn create [req]
   (let [user (get-user req)
@@ -28,17 +28,19 @@
 
 (defn details [req]
   (let [id (game-id req)]
-    (json/encode (games/details id))))
+    (json-success (games/details id))))
 
 (defn join [req]
   (let [user (get-user req)
         id (game-id req)]
-    (json/encode (games/join id user))))
+    (games/join id user)
+    (accepted)))
 
 (defn leave [req]
   (let [user (get-user req)
         id (game-id req)]
-    (json/encode (games/leave id user))))
+    (games/leave id user)
+    (accepted)))
 
 (defn start [req]
   (let [user (get-user req)
@@ -51,8 +53,8 @@
     (when game
       (let [res (games/start id user board move)]
         (if (= (:res res) :ok)
-          (json/encode (games/current-turn id))
-          (json/encode res))))))
+          (json-success (games/current-turn id))
+          (json-bad-request res))))))
 
 (defn user-games [req]
   (let [user (get-user req)]
@@ -62,11 +64,11 @@
   (let [id (game-id req)
         user (get-user req)
         max-players (Integer. (:max-players (:params req)))]
-    (json/encode (games/update-max-players id user max-players))))
+    (json-success (games/update-max-players id user max-players))))
 
 (defn current-turn [req]
   "returns the current turn with options"
-  (json/encode (games/current-turn (game-id req))))
+  (json-success (games/current-turn (game-id req))))
 
 (defn apply-turn [req]
   (let [id (game-id req)
@@ -74,8 +76,8 @@
         move (:move (:params req))
         turn (games/current-turn id)]
     (if-let [errors (game-logic/validate-move-format turn move)]
-      (json/encode errors)
-      (json/encode (game-logic/handle-turn turn move user)))))
+      (error errors)
+      (json-success (game-logic/handle-turn turn move user)))))
 
 (defn abandon-game [req]
   (let [id (game-id req)

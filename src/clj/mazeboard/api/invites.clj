@@ -1,26 +1,26 @@
 (ns mazeboard.api.invites
   (:require
    [mazeboard.data.invites :as invites]
-   [mazeboard.api.utils :refer [success]]))
+   [mazeboard.api.response :refer [json-success]]))
 
 (defn received-by-user [req]
-  (success "[]"))
+  (json-success []))
 
 (defn sent-by-user [req]
-  (success "[]"))
+  (json-success []))
 
 (defn create [req]
   (let [invitation (invites/create "usera" "userb")]
-    (success invitation)))
+    (json-success invitation)))
 
 (defn details [req]
-  (success "[]"))
+  (json-success []))
 
 (defn accept [req]
-  (success "[]"))
+  (json-success []))
 
 (defn decline [req]
-  (success "[]"))
+  (json-success []))
 
 (defn delete [req]
-  (success "[]"))
+  (json-success []))

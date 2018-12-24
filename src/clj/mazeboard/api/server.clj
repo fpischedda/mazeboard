@@ -6,11 +6,11 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.util.response :refer [content-type]]
             [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication
                                            wrap-authorization]]
             [buddy.auth.accessrules :refer [wrap-access-rules]]
-            [buddy.util.response :refer [content-type]]
             [org.httpkit.server :refer [run-server]]))
 
 (defonce server-instance (atom nil))

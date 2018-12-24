@@ -7,6 +7,9 @@
   {:status status
    :body (json/encode body)})
 
+(defn json-bad-request [status & errors]
+  (json-response 400 (json/encode {:errors errors})))
+
 (defn error [status & errors]
   (json-response status {:errors errors}))
 
@@ -16,3 +19,12 @@
 (defn created [url]
   {:status 201
    :headers {"Location" url}})
+
+(defn accepted
+  ([] {:status 202})
+  ([url]
+   {:status 202
+    :headers {"Location" url}}))
+
+(defn no-content []
+  {:status 204})
