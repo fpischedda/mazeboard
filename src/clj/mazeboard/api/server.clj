@@ -10,6 +10,7 @@
             [buddy.auth.middleware :refer [wrap-authentication
                                            wrap-authorization]]
             [buddy.auth.accessrules :refer [wrap-access-rules]]
+            [buddy.util.response :refer [content-type]]
             [org.httpkit.server :refer [run-server]]))
 
 (defonce server-instance (atom nil))
@@ -24,7 +25,7 @@
   [handler]
   (fn [request]
     (let [response (handler request)]
-      (assoc-in response [:headers "Content-Type"] "application/json"))))
+      (content-type response "application/json"))))
 
 (defn allow-cross-origin
   "middleware function to allow cross origin"

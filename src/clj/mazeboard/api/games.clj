@@ -2,7 +2,7 @@
   (:require
    [cheshire.core :as json]
    [compojure.core :refer [context GET POST PATCH DELETE]]
-   [mazeboard.api.utils :refer [success]]
+   [mazeboard.api.response :refer [json-success created]]
    [mazeboard.data.games :as games]
    [mazeboard.dice :as dice]
    [mazeboard.game :as game-logic]))
@@ -13,14 +13,18 @@
 
 (defn get-user [req]
   "extracts username from request"
-  (:username (:identity req)))
+  (:usr (:identity req)))
+
+(defn game-url [game]
+  (str (:base-url config) "games/" (:_id game)))
 
 (defn create [req]
   (let [user (get-user req)
         params (:params req)
         max-players (Integer. (:max-players params))
-        board-size (Integer. (:board-size params))]
-    (json/encode (games/create user max-players board-size :coin))))
+        board-size (Integer. (:board-size params))
+        game (games/create user max-players board-size :coin)]
+    (created (game-url game))))
 
 (defn details [req]
   (let [id (game-id req)]

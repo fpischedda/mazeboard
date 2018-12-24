@@ -1,21 +1,17 @@
 (ns mazeboard.data.users
   (:require [monger.collection :as mc]
-            [buddy.hashers :as hashers]
             [mazeboard.data.utils :refer [paged-filter]]
             [mazeboard.data.connection :refer [database]]))
 
-(defn get-hash [text]
-  (hashers/derive text))
+(def user-collection "users")
 
 (defn all [page page-size]
-  (paged-filter database "users" page page-size {}))
+  (paged-filter database user-collection page page-size {}))
 
-(defn create [username email password]
-  (mc/insert-and-return database "users" {:_id username
-                                          :email email
-                                          :password (get-hash password)}))
+(defn create [username email hashed-password]
+  (mc/insert-and-return database user-collection {:_id username
+                                                  :email email
+                                                  :password hashed-password}))
 
-(defn exists [username password]
-  (let [user (mc/find-one-as-map database "users" {:_id username})]
-    (hashers/check password (:password user))))
-
+(defn get-by-username [username]
+  (mc/find-one-as-map database user-collection {:_id username}))
