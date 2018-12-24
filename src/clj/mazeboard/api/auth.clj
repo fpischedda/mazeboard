@@ -2,44 +2,54 @@
   (:require
    [clj-time.core :as time]
    [compojure.core :refer [defroutes context POST]]
+   [buddy.hashers :as hashers]
    [buddy.sign.jwt :as jwt]
    [cheshire.core :as json]
    [mazeboard.config :refer [config]]
-   [mazeboard.data.users :as users]))
+   [mazeboard.data.users :as users]
+   [mazeboard.api.response :as response]))
+
+(defn get-hash [text]
+  (hashers/derive text))
+
+(defn check-user-password [user password]
+  (hashers/check password (:password user)))
 
 (defn get-token-claims [username]
-  {:username username
+  {:usr username
    :exp (time/plus (time/now) (time/seconds (:session-expiration-seconds config)))})
+
+(defn get-token [username]
+  (jwt/sign (get-token-claims username) (:auth-secret config)))
+
+(defn succesful-login-response [username]
+  (response/json-success {:token (get-token username)
+                          :username username}))
 
 (defn login
   [request]
   (let [data (:params request)
-        username (:username data)
-        user-exists (users/exists username
-                                  (:password data))
-        claims (get-token-claims username)
-        token (jwt/sign claims (:auth-secret config))]
-    (if user-exists
-      (json/encode {:token token
-                    :username username})
-      {:status 401
-       :body (json/encode {:errors [{:code :user-not-found
-                                     :text "user not found"}]})})))
+        username (:username data)]
+    (if-let [user (some? (users/get-by-username username))]
+      (if (check-user-password user (:password data))
+        (succesful-login-response username)
+        (response/error 401 {:code :login/invalid-credetials
+                             :text "Invalid credentials"}))
+      (response/error 400 {:code :login/user-not-found
+                           :text "User not found"}))))
 
-(defn register [req]
-  (let [data (:params req)
-        username (:username data)
-        user-id (:_id (users/create
-                       username
-                       (:email data)
-                       (:password data)))
-        claims (get-token-claims username)
-        token (jwt/sign claims (:auth-secret config))]
-    (if user-id
-      (json/encode {:token token
-                    :username username})
-      (json/encode {:errors [{:code :unable-to-register
-                              :text "unable to register"}]}))))
+(defn register [request]
+  (let [data (:params request)
+        username (:username data)]
+    (if-let [user (nil? (users/get-by-username username))]
+      (response/error 400 {:code :registration/user-exists
+                           :text ("Username " username " already exists")}))
+    (do
+      (users/create
+       username
+       (:email data)
+       (:password data))
+      (succesful-login-response username))))
 
 (def routes (context "/auth" []
                      (POST "/login" [] login)

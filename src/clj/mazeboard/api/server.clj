@@ -6,6 +6,7 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.util.response :refer [content-type]]
             [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication
                                            wrap-authorization]]
@@ -24,7 +25,7 @@
   [handler]
   (fn [request]
     (let [response (handler request)]
-      (assoc-in response [:headers "Content-Type"] "application/json"))))
+      (content-type response "application/json"))))
 
 (defn allow-cross-origin
   "middleware function to allow cross origin"
