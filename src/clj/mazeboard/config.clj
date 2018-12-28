@@ -4,6 +4,3 @@
 
 (defn get [ken]
   (get env key))
-
-(defstate config
-  :start env)

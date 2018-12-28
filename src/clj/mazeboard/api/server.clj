@@ -1,6 +1,6 @@
 (ns mazeboard.api.server
   (:require [mazeboard.api.routes :refer [routes]]
-            [mazeboard.config :refer [config]]
+            [mazeboard.config :as config]
             [mazeboard.api.authorization :refer [rules]]
             [mount.core :refer [defstate]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
@@ -52,7 +52,8 @@
 
 
 (defn start []
-  (let [{:keys [api-server auth-secret]} config]
+  (let [auth-secret (config/get :auth-secret)
+        api-server (config/get :api-server)]
     (println "starting api server " api-server)
     (reset! server-instance (run-server (gen-app auth-secret) api-server))))
 

@@ -1,10 +1,10 @@
 (ns mazeboard.data.connection
   (:require [monger.core :as mg]
             [mount.core :refer [defstate]]
-            [mazeboard.config :refer [config]]))
+            [mazeboard.config :as config]))
 
 (defstate connection
-  :start (mg/connect-via-uri (:mongodb config))
+  :start (mg/connect-via-uri (config/get :mongodb))
   :stop (mg/disconnect (:conn connection)))
 
 (defstate database
