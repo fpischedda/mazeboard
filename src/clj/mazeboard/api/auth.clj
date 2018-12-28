@@ -47,7 +47,7 @@
         (users/create
           username
           (:email data)
-          (:password data))
+          (get-hash (:password data)))
         (login-success-response username))
       (response/bad-request {:code :registration/user-exists
                              :text (str "Username " username " already exists")}))))
