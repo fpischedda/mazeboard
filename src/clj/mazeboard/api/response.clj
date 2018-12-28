@@ -7,8 +7,8 @@
   {:status status
    :body (json/encode body)})
 
-(defn json-bad-request [status & errors]
-  (json-response 400 (json/encode {:errors errors})))
+(defn bad-request [& errors]
+  (json-response 400 {:errors errors}))
 
 (defn error [status & errors]
   (json-response status {:errors errors}))
