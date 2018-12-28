@@ -16,6 +16,7 @@
 (defonce server-instance (atom nil))
 
 (def mazeboard-defaults (assoc site-defaults :security {:anti-forgery false}))
+
 (defn gen-auth-backend [auth-secret]
   (backends/jws {:secret auth-secret}))
 

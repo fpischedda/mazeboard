@@ -2,7 +2,7 @@
   (:require
    [cheshire.core :as json]
    [compojure.core :refer [context GET POST PATCH DELETE]]
-   [mazeboard.api.response :refer [error json-bad-request json-success created accepted]]
+   [mazeboard.api.response :refer [error bad-request json-success created accepted]]
    [mazeboard.data.games :as games]
    [mazeboard.dice :as dice]
    [mazeboard.game :as game-logic]))
@@ -54,7 +54,7 @@
       (let [res (games/start id user board move)]
         (if (= (:res res) :ok)
           (json-success (games/current-turn id))
-          (json-bad-request res))))))
+          (bad-request res))))))
 
 (defn user-games [req]
   (let [user (get-user req)]
