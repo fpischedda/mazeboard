@@ -1,12 +1,14 @@
 (ns mazeboard.api.routes
-  (:require [compojure.core :refer [defroutes context GET POST DELETE ANY OPTIONS]]
-            [mazeboard.api.auth :as auth]
+  (:require [mazeboard.api.auth :as auth]
             [mazeboard.api.invites :as invites]
             [mazeboard.api.games :as games]))
 
-(defroutes routes
-  (context "/api/v1" []
-           (OPTIONS ":url{.*}" [url] "")
-           auth/routes
-           invites/routes
-           games/routes))
+(def routes
+  ["/api/v1" {:options
+              (fn [_request]
+                {:headers {"Access-Control-Allow-Origin" "*"
+                           "Access-Control-Allow-Methods" "GET,PUT,POST,PATCH,DELETE,OPTIONS"
+                           "Access-Control-Allow-Headers" "X-Requested-With,Content-Type,Cache-Control, Authorization"}})}
+   auth/routes
+   invites/routes
+   games/routes])

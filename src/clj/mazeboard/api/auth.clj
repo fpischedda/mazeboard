@@ -1,11 +1,10 @@
 (ns mazeboard.api.auth
   (:require
    [clj-time.core :as time]
-   [compojure.core :refer [defroutes context POST]]
    [buddy.hashers :as hashers]
    [buddy.sign.jwt :as jwt]
    [cheshire.core :as json]
-   [mazeboard.config :as config]
+   [mazeboard.config :refer [config]]
    [mazeboard.data.users :as users]
    [mazeboard.api.response :as response]))
 
@@ -17,10 +16,13 @@
 
 (defn get-token-claims [username]
   {:usr username
-   :exp (time/plus (time/now) (time/seconds (config/get :session-expiration-seconds)))})
+   :exp (->> (:session-expiration-seconds config)
+            time/seconds
+            (time/plus (time/now)))
+   :exp (time/plus (time/now) (time/seconds ))})
 
 (defn get-token [username]
-  (jwt/sign (get-token-claims username) (config/get :auth-secret)))
+  (jwt/sign (get-token-claims username) (:auth-secret config)))
 
 (defn login-success-response [username]
   (response/json-success {:token (get-token username)
@@ -53,6 +55,5 @@
                              :text (str "Username " username " already exists")}))))
 
 (def routes
-  (context "/auth" []
-           (POST "/login" [] login)
-           (POST "/register" [] register)))
+  ["/auth" ["/login" {:post login}
+            "/register" {:post register}]])

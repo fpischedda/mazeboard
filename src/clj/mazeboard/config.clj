@@ -1,6 +1,6 @@
 (ns mazeboard.config
   (:require [mount.core :refer [defstate]]
-            [config.core :refer [env]]))
+            [config.core :refer [load-env]]))
 
-(defn get [ken]
-  (get env key))
+(defstate config
+  :start (load-env))

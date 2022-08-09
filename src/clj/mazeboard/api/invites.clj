@@ -1,6 +1,5 @@
 (ns mazeboard.api.invites
   (:require
-   [compojure.core :refer [defroutes context GET POST DELETE]]
    [mazeboard.data.invites :as invites]
    [mazeboard.api.response :refer [json-success]]))
 
@@ -27,11 +26,11 @@
   (json-success []))
 
 (def routes
-  (context "/invites" []
-           (GET "/" [] received-by-user)
-           (POST "/" [] create)
-           (context "/:id" [id]
-                    (GET "/" [] details)
-                    (POST "/accept" [] accept)
-                    (POST "/decline" [] decline)
-                    (DELETE "/" [] delete))))
+  ["/invites"
+   ["/:id" ["/" {:get details
+                 :delete delete}
+            "/accept" {:post accept}
+            "/decline" {:post decline}]]
+
+   ["/" {:get received-by-user
+         :post create}]])
