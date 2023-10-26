@@ -5,6 +5,7 @@
 
 (defn json-response [status body]
   {:status status
+   :headers {"Content-Type" "application/json"}
    :body (json/encode body)})
 
 (defn bad-request [& errors]
@@ -17,14 +18,12 @@
   (response (json/encode body)))
 
 (defn created [url]
-  {:status 201
-   :headers {"Location" url}})
+  (json-response 201 {:href {:location url}}))
 
 (defn accepted
   ([] {:status 202})
   ([url]
-   {:status 202
-    :headers {"Location" url}}))
+   (json-response 202 {:href {:location url}})))
 
 (defn no-content []
   {:status 204})

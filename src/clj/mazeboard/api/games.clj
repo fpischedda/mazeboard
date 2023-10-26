@@ -1,17 +1,18 @@
 (ns mazeboard.api.games
   (:require
-   [cheshire.core :as json]
    [mazeboard.api.response :as response]
    [mazeboard.data.games :as games]
    [mazeboard.dice :as dice]
    [mazeboard.game :as game-logic]))
 
-(defn game-id [req]
+(defn game-id
   "returns the game id taking it from the request parameters"
+  [req]
   (:id (:route-params req)))
 
-(defn get-user [req]
+(defn get-user
   "extracts username from request"
+  [req]
   (:usr (:identity req)))
 
 (defn game-url [game]
@@ -65,8 +66,9 @@
         max-players (Integer. (:max-players (:params req)))]
     (response/json-success (games/update-max-players id user max-players))))
 
-(defn current-turn [req]
+(defn current-turn
   "returns the current turn with options"
+  [req]
   (response/json-success (games/current-turn (game-id req))))
 
 (defn apply-turn [req]

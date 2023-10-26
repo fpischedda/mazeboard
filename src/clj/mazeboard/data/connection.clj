@@ -4,7 +4,7 @@
             [mazeboard.config :as config]))
 
 (defstate connection
-  :start (mg/connect-via-uri (config/get :mongodb))
+  :start (mg/connect-via-uri (:mongodb config))
   :stop (mg/disconnect (:conn connection)))
 
 (defstate database

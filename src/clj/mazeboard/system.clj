@@ -1,12 +1,13 @@
 (ns mazeboard.system
   (:require [mount.core :refer [defstate]]
+            [mazeboard.config :refer [config]]
             [mazeboard.data.connection :refer [database]]
-            [mazeboard.api.server :refer [server]])
+            [mazeboard.api.server :refer [http-server]])
   (:gen-class))
 
 (defstate system
   :start {:database database
-          :server server})
+          :server http-server})
 
 (defn -main [& _args]
   (println "Starting mazeboard service...")

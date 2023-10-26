@@ -1,6 +1,5 @@
 (ns mazeboard.api.auth
   (:require
-   [clj-time.core :as time]
    [buddy.hashers :as hashers]
    [buddy.sign.jwt :as jwt]
    [cheshire.core :as json]
@@ -14,15 +13,14 @@
 (defn check-user-password [user password]
   (hashers/check password (:password user)))
 
-(defn get-token-claims [username]
+(defn get-token-claims [username session-expiration-seconds]
   {:usr username
-   :exp (->> (:session-expiration-seconds config)
-            time/seconds
-            (time/plus (time/now)))
-   :exp (time/plus (time/now) (time/seconds ))})
+   :exp (-> (java.time.Instant/now)
+            (.plusSeconds session-expiration-seconds))})
 
 (defn get-token [username]
-  (jwt/sign (get-token-claims username) (:auth-secret config)))
+  (jwt/sign (get-token-claims username (:session-expiration-seconds config))
+            (:auth-secret config)))
 
 (defn login-success-response [username]
   (response/json-success {:token (get-token username)

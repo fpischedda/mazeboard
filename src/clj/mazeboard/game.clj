@@ -4,20 +4,22 @@
             [mazeboard.tile :as tile]
             [mazeboard.dice :as dice]))
 
-(defn make-players [names width height]
+(defn make-players
   "creates players data based on names and board size"
+  [names width height]
   (let [corners [[0 0]
                  [0 (- width 1)]
                  [(- height 1) (- width 1)]
                  [(- height 1) 0]]]
     (map-indexed #(player/make-player %2 (get corners %1)) names)))
 
-(defn make-fake-players [width height]
+(defn make-fake-players
   "creates a couple of fake players"
+  [width height]
   (make-players ["fra" "afr"] width height))
 
 (defn init-game
-  "creates a game as a map, if a tile function is not provided use tile/random-time"
+  "creates a game as a map, if a tile function is not provided use tile/random-tile"
   ([player-names width height dice-type]
    (init-game player-names width height dice-type tile/random-tile))
 
@@ -29,32 +31,38 @@
                    :col (int (/ width 2))}
     :board (board/make-board width height tile-fn)}))
 
-(defn game-current-player [game]
+(defn game-current-player
   "returns the current player"
+  [game]
   (nth (:players game) (:current-player game)))
 
-(defn game-current-player-position [game]
+(defn game-current-player-position
   "returns the position of the current player"
+  [game]
   (player/player-position (game-current-player game)))
 
-(defn tile-at-position [position board]
+(defn tile-at-position
   "returns the tile at the specified position"
+  [position board]
   (board/tile-at board
                  (:row position)
                  (:col position)))
 
-(defn can-move-from-here? [position board direction]
+(defn can-move-from-here?
   "returns true if the player can move from the specified position"
+  [position board direction]
   (tile/is-open? direction (tile-at-position position board)))
 
 (def swap-dir {:up :down :right :left :down :up :left :right})
 
-(defn can-move-to-there? [position board direction]
+(defn can-move-to-there?
   "returns true if the player can move to this position"
+  [position board direction]
   (tile/is-open? (direction swap-dir) (tile-at-position position board)))
 
-(defn valid-move? [position new-position board direction]
+(defn valid-move?
   "returns true if the new position is valid, false otherwise"
+  [position new-position board direction]
   (and (board/is-inside? board (:row new-position) (:col new-position))
       (can-move-from-here? position board direction)
       (can-move-to-there? new-position board direction)))
@@ -64,25 +72,29 @@
                      :right {:row identity :col inc}
                      :left {:row identity :col dec}})
 
-(defn calculate-next-position [position direction]
+(defn calculate-next-position
   "returns the new position based on current one and the move"
+  [position direction]
   (let [move-fn (direction move-functions)]
     {:row ((:row move-fn) (:row position))
     :col ((:col move-fn) (:col position))}))
 
-(defn set-current-player-position [game position]
+(defn set-current-player-position
   "sets the position for the current player"
+  [game position]
   (assoc (game-current-player game) :position position))
 
-(defn next-player [game]
+(defn next-player
   "returns the index of the next player"
+  [game]
   (let [player-index (:current-player game)]
     (if (= player-index (count (:players game)))
      0
      (inc player-index))))
 
-(defn handle-movement [game move]
+(defn handle-movement
   "handle the movement of the current player"
+  [game move]
   (let [player (game-current-player game)
         position (player/player-position player)
         direction (:direction move)
@@ -92,19 +104,22 @@
        (assoc game :current-player (next-player)))
       game)))
 
-(defn handle-rotation [game move]
+(defn handle-rotation
   "handles the rotation of the specified tile"
+  [game move]
   (let [row (:row move)
         col (:col move)
         dir (:direction move)]
     (board/rotate-board-tile game row col dir)))
 
-(defn is-winning-position? [game position]
+(defn is-winning-position?
   "returns true if the specified position is the winning one"
+  [game position]
   (= (:end-position game) position))
 
-(defn winner [game]
+(defn winner
   "returns the winner if any or nil"
+  [game]
   (first (filter #(is-winning-position? game (:position %)) (:players game))))
 
 (defn handle-turn [game move]
@@ -114,9 +129,9 @@
      (handle-movement game move-data)
      (handle-rotation game move-data))))
 
-(defn validate-move-format [game move user]
+(defn validate-move [game move user]
   (let [player (game-current-player game)]
     (if-not (= user (:username player))
       {:errors [{:type :wrong-player}]}
       (when-not (contains? #{:move :rotate} (:type move))
-        :errors [{:type :wrong-move-type}]))))
+        {:errors [{:type :wrong-move-type}]}))))

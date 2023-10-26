@@ -1,8 +1,8 @@
 (ns mazeboard.api.server
   (:require [mazeboard.api.routes :refer [routes]]
-            [mazeboard.config :as config]
+            [mazeboard.config :refer [config]]
             [mazeboard.api.authorization :refer [rules]]
-            [mount.core :refer [defstate]]
+            [mount.core :as mount]
             [reitit.ring :as ring]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
