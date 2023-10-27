@@ -32,9 +32,10 @@
     :board (board/make-board width height tile-fn)}))
 
 (defn game-current-player
-  "returns the current player"
+  "returns the current player based on the current turn"
   [game]
-  (nth (:players game) (:current-player game)))
+  (let [players (:players game)]
+    (nth players (mod (dec (:turn-number game)) (count players)))))
 
 (defn game-current-player-position
   "returns the position of the current player"
@@ -67,30 +68,20 @@
       (can-move-from-here? position board direction)
       (can-move-to-there? new-position board direction)))
 
-(def move-functions {:up {:row dec :col identity}
-                     :down {:row inc :col identity}
-                     :right {:row identity :col inc}
-                     :left {:row identity :col dec}})
+(def move-functions {:up (fn [pos] (update pos :row dec))
+                     :down (fn [pos] (update pos :row inc))
+                     :right (fn [pos] (update pos :col inc))
+                     :left (fn [pos] (update pos :col dec))})
 
 (defn calculate-next-position
   "returns the new position based on current one and the move"
   [position direction]
-  (let [move-fn (direction move-functions)]
-    {:row ((:row move-fn) (:row position))
-    :col ((:col move-fn) (:col position))}))
+  ((get move-functions direction) position))
 
 (defn set-current-player-position
   "sets the position for the current player"
   [game position]
   (assoc (game-current-player game) :position position))
-
-(defn next-player
-  "returns the index of the next player"
-  [game]
-  (let [player-index (:current-player game)]
-    (if (= player-index (count (:players game)))
-     0
-     (inc player-index))))
 
 (defn handle-movement
   "handle the movement of the current player"
@@ -101,16 +92,14 @@
         next-position (calculate-next-position position direction)]
     (if (valid-move? position next-position (:board game) direction)
       ((set-current-player-position game next-position)
-       (assoc game :current-player (next-player)))
+       (update game :turn-number inc))
       game)))
 
 (defn handle-rotation
   "handles the rotation of the specified tile"
   [game move]
-  (let [row (:row move)
-        col (:col move)
-        dir (:direction move)]
-    (board/rotate-board-tile game row col dir)))
+  (let [{:keys [row col direction]} move]
+    (board/rotate-board-tile game row col direction)))
 
 (defn is-winning-position?
   "returns true if the specified position is the winning one"
