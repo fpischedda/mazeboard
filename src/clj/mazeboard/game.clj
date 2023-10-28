@@ -31,16 +31,16 @@
                    :col (int (/ width 2))}
     :board (board/make-board width height tile-fn)}))
 
-(defn game-current-player
+(defn current-player
   "returns the current player based on the current turn"
   [game]
   (let [players (:players game)]
     (nth players (mod (dec (:turn-number game)) (count players)))))
 
-(defn game-current-player-position
+(defn current-player-position
   "returns the position of the current player"
   [game]
-  (player/player-position (game-current-player game)))
+  (player/player-position (current-player game)))
 
 (defn tile-at-position
   "returns the tile at the specified position"
@@ -68,10 +68,10 @@
       (can-move-from-here? position board direction)
       (can-move-to-there? new-position board direction)))
 
-(def move-functions {:up (fn [pos] (update pos :row dec))
-                     :down (fn [pos] (update pos :row inc))
+(def move-functions {:up    (fn [pos] (update pos :row dec))
+                     :down  (fn [pos] (update pos :row inc))
                      :right (fn [pos] (update pos :col inc))
-                     :left (fn [pos] (update pos :col dec))})
+                     :left  (fn [pos] (update pos :col dec))})
 
 (defn calculate-next-position
   "returns the new position based on current one and the move"
@@ -81,12 +81,12 @@
 (defn set-current-player-position
   "sets the position for the current player"
   [game position]
-  (assoc (game-current-player game) :position position))
+  (assoc (current-player game) :position position))
 
 (defn handle-movement
   "handle the movement of the current player"
   [game move]
-  (let [player (game-current-player game)
+  (let [player (current-player game)
         position (player/player-position player)
         direction (:direction move)
         next-position (calculate-next-position position direction)]
@@ -119,7 +119,7 @@
      (handle-rotation game move-data))))
 
 (defn validate-move [game move user]
-  (let [player (game-current-player game)]
+  (let [player (current-player game)]
     (if-not (= user (:username player))
       {:errors [{:type :wrong-player}]}
       (when-not (contains? #{:move :rotate} (:type move))

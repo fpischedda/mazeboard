@@ -3,8 +3,8 @@
 
 (defn make-board-row
   "creates a board row"
-  [size tile-fn]
-  (vec (repeatedly size tile-fn)))
+  [width tile-fn]
+  (vec (repeatedly width tile-fn)))
 
 (defn make-board-tiles
   "create board tiles matrix of dimensions width X height"
@@ -23,7 +23,7 @@
   [board row col]
   (get-in board [:tiles row col]))
 
-(defn update-board
+(defn set-tile
   "replace the tile at row-col with the new tile"
   [board row col new-tile]
   (assoc-in board [:tiles row col] new-tile))
@@ -31,7 +31,7 @@
 (defn rotate-board-tile
   "rotate a board tile identified by row col coordinates"
   [board row col dir]
-  (update-board board row col (tile/rotate-tile dir (tile-at board row col))))
+  (set-tile board row col (tile/rotate-tile dir (tile-at board row col))))
 
 (defn board-width
   "returns board width"

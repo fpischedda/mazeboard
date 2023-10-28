@@ -58,17 +58,17 @@
                                     (if (= :open wall) (wall-name idx) nil))
                                   tile)))
 
-(def direction-fn {:north #(get % 0) 
-                   :east #(get % 1) 
-                   :south #(get % 2) 
-                   :west #(get % 3)})
+(def direction-fn {:north #(nth % 0) 
+                   :east #(nth % 1) 
+                   :south #(nth % 2) 
+                   :west #(nth % 3)})
 
 (defn wall-at
   "return the tile wall at the specified direction (:north, :east etc)"
-  [side tile]
+  [tile side]
   ((direction-fn side) tile))
 
-(defn is-open?
+(defn side-open?
   "returns true if the wall at the specified side is open"
-  [side tile]
-  (= (wall-at side tile) :open))
+  [tile side]
+  (= (wall-at tile side) :open))

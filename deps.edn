@@ -10,13 +10,13 @@
         metosin/reitit-swagger-ui {:mvn/version "0.5.18"}
         com.novemberain/monger {:mvn/version "3.1.0"}
         integrant/integrant {:mvn/version "0.8.1"}
-        nrepl/nrepl {:mvn/version "0.9.0"}}
+        nrepl/nrepl {:mvn/version "1.1.0-alpha1"}}
  :paths ["src/clj" "src/cljc" "resources"]
  :aliases {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
                    :ns-default build}
            :dev/repl {:main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]
-                      :extra-paths ["dev"]
-                      :extra-deps {cider/cider-nrepl {:mvn/version "0.35.0"}
+                      :extra-paths ["dev" "test"]
+                      :extra-deps {cider/cider-nrepl {:mvn/version "0.41.0"}
                                    djblue/portal {:mvn/version "0.46.0"}
                                    com.github.jpmonettas/clojure {:mvn/version "1.12.0-alpha3"}
                                    com.github.jpmonettas/flow-storm-dbg {:mvn/version "3.3.315"}}
